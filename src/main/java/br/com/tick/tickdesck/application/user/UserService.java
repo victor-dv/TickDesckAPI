@@ -19,9 +19,9 @@ public class UserService {
     //Retorna o usuário criado
     public UserEntity createUser(UserEntity userEntity) {
         this.userRepository
-                .findByUsernameOrEmail(userEntity.getEmail(), userEntity.getUsername())
+                .findByEmail(userEntity.getUsername())
                 .ifPresent((user) -> {
-                    throw new RuntimeException("User already exists with username or email: " + userEntity.getUsername() + " / " + userEntity.getEmail());
+                    throw new RuntimeException("User already exists with email: " +  userEntity.getEmail());
                 });
 
         return this.userRepository.save(userEntity);
