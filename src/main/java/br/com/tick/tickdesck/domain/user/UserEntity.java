@@ -13,7 +13,6 @@ import java.util.UUID;
 @Entity
 @Data
 public class UserEntity {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
