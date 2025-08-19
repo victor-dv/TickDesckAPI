@@ -17,7 +17,7 @@ public class CallsEntity {
     private Long id;
 
     private int NumeroChamado;
-    @Email(message = "O campo[email] deve ser preenchido corretamente")
+    @Email
     private String EmailEnvio;
     private String UsernameEnvio;
     private Long IdEmpresa;
