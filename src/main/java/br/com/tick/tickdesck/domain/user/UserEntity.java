@@ -18,7 +18,9 @@ public class UserEntity {
     private Long id;
     private String name;
     private String username;
-    @Email
+    @Email(message = "O email deve ser válido")
     private String email;
     private String password;
+
+    private String role = "USER"; //
 }
