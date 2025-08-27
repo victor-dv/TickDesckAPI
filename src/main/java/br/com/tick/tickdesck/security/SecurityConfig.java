@@ -38,7 +38,7 @@ public class SecurityConfig {
                 //Permite acesso livre a /user/**
                 //Exige autenticação para qualquer outra requisição
                 .authorizeHttpRequests(auth -> {
-                    auth.requestMatchers("/user/**").permitAll();
+                    auth.requestMatchers("api/user/**").permitAll();
                     auth.anyRequest().authenticated();
                 })
                 //Adiciona o filtro de segurança personalizado antes do filtro de autenticação básica

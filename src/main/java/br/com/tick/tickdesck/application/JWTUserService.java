@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class JWTUserService {
 
-    @Value("security.token.secret.user")
+    @Value("${security.token.secret.user}")
     private String secretKey;
 
     //Metodo para gerar o token JWT

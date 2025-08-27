@@ -5,7 +5,7 @@ package br.com.tick.tickdesck.application.dto;
 // SUPORT: Usuário de suporte com permissões limitadas
 // GERENT: Usuário gerente com permissões intermediárias
 // CLIENT: Usuário cliente com permissões básicas
-public enum RegisterUser {
+public enum Role {
     ADMIN,
     SUPORT,
     GERENT,

@@ -27,14 +27,14 @@ public class AuthUserService {
     private UserRepository userRepository;
 
     // Método que executa a autenticação do usuário
-    // Recebe um objeto AuthUserRequestDto contendo o email e a senha do usuário
-    // Verifica se o usuário existe no repositório pelo email
-    // Se o usuário não existir ou a senha não corresponder, lança uma exceção
-    // Se a autenticação for bem-sucedida, gera um token JWT com as informações
-    // do usuário e o retorna encapsulado em um objeto AuthUserResponseDto
-    // O token contém informações como o ID do usuário, nome, papel e email,
-    // além de uma data de expiração definida para 80 minutos a partir do momento da
-    // autenticação.
+    /* Recebe um objeto AuthUserRequestDto contendo o email e a senha do usuário
+    * Verifica se o usuário existe no repositório pelo email
+    * Se o usuário não existir ou a senha não corresponder, lança uma exceção
+    * Se a autenticação for bem-sucedida, gera um token JWT com as informações
+    * do usuário e o retorna encapsulado em um objeto AuthUserResponseDto
+    * O token contém informações como o ID do usuário, nome, papel e email,
+    * além de uma data de expiração definida para 80 minutos a partir do momento da
+   autenticação. */
     public AuthUserResponseDto execute(AuthUserRequestDto authUserRequestDto) {
         var user = this.userRepository.findByEmail(authUserRequestDto.email())
                 .orElseThrow(() -> new RuntimeException("Email ou senha inválidos"));
@@ -53,13 +53,13 @@ public class AuthUserService {
                 .withIssuer("TickDesk")
                 .withSubject(user.getId().toString())
                 .withClaim("name", user.getName())
-                .withClaim("role", user.getRole())
+                .withClaim("role", user.getRole().name())
                 .withClaim("email", user.getEmail())
                 .withExpiresAt(java.util.Date.from(expireIn))
                 .sign(algorithm);
 
-        // Retorna um objeto AuthUserResponseDto contendo o token e o tempo de expiração
-        // do token em milissegundos desde a época (epoch)
+        /* Retorna um objeto AuthUserResponseDto contendo o token e o tempo de expiração
+         do token em milissegundos desde a época (epoch) */
         return AuthUserResponseDto.builder()
                 .access_token(token)
                 .expires_in(expireIn.toEpochMilli())

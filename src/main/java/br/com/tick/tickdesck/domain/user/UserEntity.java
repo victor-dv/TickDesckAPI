@@ -1,6 +1,7 @@
 package br.com.tick.tickdesck.domain.user;
 
 
+import br.com.tick.tickdesck.application.dto.Role;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;
@@ -23,10 +24,10 @@ public class UserEntity {
     @Email(message = "O email deve ser válido")
     private String email;
 
-    @Length(min = 8,max = 50, message = "A senha deve ter pelo menos 8 caracteres")
+    @Length(min = 8,max = 100, message = "A senha deve ter pelo menos 8 caracteres")
     private String password;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private String role = "USER"; //
+    private Role role = Role.ADMIN;
 }
