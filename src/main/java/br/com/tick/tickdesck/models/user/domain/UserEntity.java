@@ -1,14 +1,12 @@
-package br.com.tick.tickdesck.domain.user;
+package br.com.tick.tickdesck.models.user.domain;
 
 
-import br.com.tick.tickdesck.application.dto.Role;
+import br.com.tick.tickdesck.models.user.application.dto.Role;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
-
-import java.util.UUID;
 
 @Entity
 @Data

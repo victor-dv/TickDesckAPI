@@ -1,4 +1,4 @@
-package br.com.tick.tickdesck.application.dto;
+package br.com.tick.tickdesck.models.user.application.dto;
 
 // DTO para a requisição de autenticação do usuário
 public record AuthUserRequestDto (

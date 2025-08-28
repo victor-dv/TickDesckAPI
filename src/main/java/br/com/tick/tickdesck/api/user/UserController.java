@@ -1,17 +1,15 @@
 package br.com.tick.tickdesck.api.user;
 
-import br.com.tick.tickdesck.application.dto.AuthUserRequestDto;
-import br.com.tick.tickdesck.application.user.AuthUserService;
-import br.com.tick.tickdesck.application.user.UserService;
-import br.com.tick.tickdesck.domain.user.UserEntity;
+import br.com.tick.tickdesck.models.user.application.dto.AuthUserRequestDto;
+import br.com.tick.tickdesck.models.user.application.AuthUserService;
+import br.com.tick.tickdesck.models.user.application.UserService;
+import br.com.tick.tickdesck.models.user.application.dto.UpdateUserDto;
+import br.com.tick.tickdesck.models.user.domain.UserEntity;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("api/user")
@@ -31,7 +29,7 @@ public class UserController {
     public ResponseEntity<?> createUser(@Valid @RequestBody UserEntity userEntity) {
         try {
             var result = this.userService.createUser(userEntity);
-            return ResponseEntity.status(HttpStatus.CREATED).body("Usuário criado com sucesso: " + result);
+            return ResponseEntity.status(HttpStatus.CREATED).body(result);
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
@@ -58,6 +56,17 @@ public class UserController {
         }
     }
 
+    @PutMapping("/update/{id}")
+    public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody UpdateUserDto updateUserDto) {
+        try {
+            var result = this.userService.updateUser(id, updateUserDto);
+            return ResponseEntity.status(HttpStatus.OK).body(result);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Ocorreu um erro interno no servidor");
+        }
+    }
 
 
 }

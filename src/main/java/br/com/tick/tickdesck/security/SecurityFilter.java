@@ -1,6 +1,6 @@
 package br.com.tick.tickdesck.security;
 
-import br.com.tick.tickdesck.application.JWTUserService;
+import br.com.tick.tickdesck.models.user.application.JWTUserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

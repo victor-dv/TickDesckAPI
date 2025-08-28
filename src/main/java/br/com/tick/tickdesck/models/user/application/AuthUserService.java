@@ -1,8 +1,8 @@
-package br.com.tick.tickdesck.application.user;
+package br.com.tick.tickdesck.models.user.application;
 
-import br.com.tick.tickdesck.application.dto.AuthUserRequestDto;
-import br.com.tick.tickdesck.application.dto.AuthUserResponseDto;
-import br.com.tick.tickdesck.infraestructure.user.UserRepository;
+import br.com.tick.tickdesck.models.user.application.dto.AuthUserRequestDto;
+import br.com.tick.tickdesck.models.user.application.dto.AuthUserResponseDto;
+import br.com.tick.tickdesck.models.user.infra.UserRepository;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import org.springframework.beans.factory.annotation.Autowired;

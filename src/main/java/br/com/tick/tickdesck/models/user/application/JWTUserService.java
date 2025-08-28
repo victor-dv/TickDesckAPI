@@ -1,4 +1,4 @@
-package br.com.tick.tickdesck.application;
+package br.com.tick.tickdesck.models.user.application;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
