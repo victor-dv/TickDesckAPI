@@ -77,5 +77,30 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    /*Função para deletar um usuário
+     * Verifica se o usuário autenticado tem papel ADMIN ou GERENTE
+     * Se não tiver, lança uma exceção
+     * Se tiver, busca o usuário pelo id
+     * Se o usuário não for encontrado, lança uma exceção
+     * Se for encontrado, deleta o usuário do repositório
+     * Retorna o usuário deletado */
+    public UserEntity deleteUser(Long id) {
+        //Pegando o usuario autenticado
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
+        //Buscando o usuario autenticado no banco de dados
+        var loggedUser = userRepository.findById(Long.decode((String) authentication.getName()))
+                .orElseThrow(() -> new RuntimeException("Usuário autenticado não encontrado"));
+        //Verificando se o usuário tem papel ADMIN ou GERENTE
+        if (!loggedUser.getRole().equals(Role.ADMIN) && !loggedUser.getRole().equals(Role.GERENT)) {
+            throw new RuntimeException("Apenas usuários com papel ADMIN ou GERENTE podem deletar usuários");
+        }
+        //Buscando o usuário pelo id
+        var user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+        //Deletando o usuário
+        userRepository.delete(user);
+        return user;
+    }
+
 }
 

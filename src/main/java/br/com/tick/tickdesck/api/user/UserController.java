@@ -68,5 +68,17 @@ public class UserController {
         }
     }
 
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> deleteUser(@PathVariable Long id) {
+        try {
+            this.userService.deleteUser(id);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Usuário deletado com sucesso");
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Ocorreu um erro interno no servidor");
+        }
+    }
+
 
 }
