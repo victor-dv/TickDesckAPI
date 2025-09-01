@@ -52,6 +52,7 @@ public class AuthUserService {
         var token = JWT.create()
                 .withIssuer("TickDesk")
                 .withSubject(user.getId().toString())
+                .withClaim("id", user.getId())
                 .withClaim("name", user.getName())
                 .withClaim("role", user.getRole().name())
                 .withClaim("email", user.getEmail())

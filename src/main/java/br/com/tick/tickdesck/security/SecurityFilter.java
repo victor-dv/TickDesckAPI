@@ -14,10 +14,10 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 import java.util.Collections;
 
-// Filtro de segurança que intercepta cada requisição HTTP
+/*// Filtro de segurança que intercepta cada requisição HTTP
 // Verifica se o cabeçalho de autorização contém um token JWT válido
 // Se o token for válido, autentica o usuário no contexto de segurança
-// Se o token for inválido ou ausente, responde com status 401 (Não autorizado)
+// Se o token for inválido ou ausente, responde com status 401 (Não autorizado)*/
 @Component
 public class SecurityFilter extends OncePerRequestFilter {
 
@@ -25,10 +25,10 @@ public class SecurityFilter extends OncePerRequestFilter {
     @Autowired
     private JWTUserService jwtUserService;
 
-    // Método que intercepta cada requisição HTTP
+  /*  // Método que intercepta cada requisição HTTP
     // Verifica se o cabeçalho de autorização contém um token JWT válido
     // Se o token for válido, autentica o usuário no contexto de segurança
-    // Se o token for inválido ou ausente, responde com status 401 (Não autorizado)
+    // Se o token for inválido ou ausente, responde com status 401 (Não autorizado)*/
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
@@ -48,7 +48,6 @@ public class SecurityFilter extends OncePerRequestFilter {
                     response.getWriter().write("Invalid or expired token");
                     return;
                 }
-
                 // Cria um objeto de autenticação com o ID do usuário
                 // e o define no contexto de segurança
                 UsernamePasswordAuthenticationToken authentication =
