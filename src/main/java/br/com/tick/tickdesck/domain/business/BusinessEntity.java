@@ -1,4 +1,4 @@
-package br.com.tick.tickdesck.domain.business;
+package br.com.tick.tickdesck.domain.call.business;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -13,10 +13,11 @@ public class BusinessEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 
     @Email
-    private String EmailEnvio;
+    private String Email;
     @Email
     private String EmailParaChamados;
     private  String RazaoSocial;
+    private  String CNPJ;
     private String NomeReduzido;
     private int QtdMaximaUsuarios;
 

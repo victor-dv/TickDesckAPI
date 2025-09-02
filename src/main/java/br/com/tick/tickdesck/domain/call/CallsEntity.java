@@ -1,4 +1,4 @@
-package br.com.tick.tickdesck.domain.call;
+package br.com.tick.tickdesck.domain.call.call;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -14,14 +14,13 @@ public class CallsEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
 
     private int NumeroChamado;
     @Email
     private String EmailEnvio;
     private String UsernameEnvio;
-    private Long IdEmpresa;
-    private Long IdUsuario;
+    private Long IdEquipe;
+    private Long IdUsuarioResponsavel;
     private int Urgencia;
 
     @DateTimeFormat

@@ -1,4 +1,4 @@
-package br.com.tick.tickdesck.domain.user;
+package br.com.tick.tickdesck.domain.call.user;
 
 
 import jakarta.persistence.Entity;
