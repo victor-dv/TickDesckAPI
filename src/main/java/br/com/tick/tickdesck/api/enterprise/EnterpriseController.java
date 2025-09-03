@@ -2,6 +2,7 @@ package br.com.tick.tickdesck.api.enterprise;
 
 import br.com.tick.tickdesck.models.enterprise.application.EnterpriseService;
 import br.com.tick.tickdesck.models.enterprise.application.dto.CreateEnterpriseDto;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,16 +19,9 @@ public class EnterpriseController {
     private EnterpriseService enterpriseService;
 
     @PostMapping("/create")
-    public ResponseEntity<?> createEnterprise(@RequestBody CreateEnterpriseDto createEnterpriseDto) {
-        try {
-            var result = this.enterpriseService.create(createEnterpriseDto);
-            return ResponseEntity.status(HttpStatus.CREATED).body(result);
-        } catch (RuntimeException e) {
-            throw new RuntimeException("Erro ao criar empresa: " + e.getMessage());
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Ocorreu um erro interno no servidor: " + e.getMessage());
-        }
-
+    public ResponseEntity<?> createEnterprise(@Valid @RequestBody CreateEnterpriseDto createEnterpriseDto) {
+        var result = this.enterpriseService.create(createEnterpriseDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
 
 }

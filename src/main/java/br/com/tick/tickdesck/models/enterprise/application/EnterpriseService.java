@@ -36,6 +36,11 @@ public class EnterpriseService {
         enterprise.setFantasyName(createEnterpriseDto.fantasyName());
         enterprise.setCnpj(createEnterpriseDto.cnpj());
         enterprise.setPhone(createEnterpriseDto.phone());
+
+        enterpriseRepository.findByCnpjOrEmail(enterprise.getCnpj(), enterprise.getEmail())
+                .ifPresent(enterpre -> {
+                    throw new RuntimeException("Empresa com cnpj ou email já cadastrados");
+                });
         return enterpriseRepository.save(enterprise);
     }
 
