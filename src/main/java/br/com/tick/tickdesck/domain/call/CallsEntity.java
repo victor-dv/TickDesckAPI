@@ -1,12 +1,10 @@
-package br.com.tick.tickdesck.domain.call.call;
+package br.com.tick.tickdesck.domain.call;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.validation.constraints.Email;
+import jakarta.persistence.*;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Data
@@ -14,21 +12,28 @@ public class CallsEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int callNumber;
+    @Column(name = "email_envio", nullable = false)
+    public String emailEnvio;
+    @Column(name = "username_envio", nullable = false)
+    public String usernameEnvio;
 
-    private int NumeroChamado;
-    @Email
-    private String EmailEnvio;
-    private String UsernameEnvio;
-    private Long IdEquipe;
-    private Long IdUsuarioResponsavel;
-    private int Urgencia;
+    private Long idEquipe;
+    private Long idUsuarioResponsavel;
 
-    @DateTimeFormat
-    private int PrevisaoSolucao;
-    @DateTimeFormat
-    private int DataFechamento;
+    @Column(nullable = false)
+    private int urgencia;
 
-    private Long UsuarioFechamento;
+    @Column(name = "previsao_solucao")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDateTime previsaoSolucao;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @Column(name = "data_fechamento")
+    private LocalDateTime dataFechamento;
+
+    @Column(name = "usuario_fechamento")
+    private Long usuarioFechamento;
 
 }
+
