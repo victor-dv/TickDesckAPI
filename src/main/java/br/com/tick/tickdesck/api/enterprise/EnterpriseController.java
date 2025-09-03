@@ -23,5 +23,4 @@ public class EnterpriseController {
         var result = this.enterpriseService.create(createEnterpriseDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
-
 }
