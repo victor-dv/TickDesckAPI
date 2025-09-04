@@ -27,14 +27,10 @@ public class UserController {
      *Se o usuário for criado com sucesso, retorna o usuário criado */
     @PostMapping("/register")
     public ResponseEntity<?> createUser(@Valid @RequestBody UserEntity userEntity) {
-        try {
-            var result = this.userService.createUser(userEntity);
-            return ResponseEntity.status(HttpStatus.CREATED).body(result);
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Ocorreu um erro interno no servidor");
-        }
+
+        var result = this.userService.createUser(userEntity);
+        return ResponseEntity.status(HttpStatus.CREATED).body(result);
+
     }
 
     /*
@@ -46,38 +42,31 @@ public class UserController {
      */
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody AuthUserRequestDto authUserRequestDto) {
-        try {
-            var token = this.authUserService.execute(authUserRequestDto);
-            return ResponseEntity.status(HttpStatus.OK).body(token);
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Falha na autenticação: " + e.getMessage());
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Ocorreu um erro interno no servidor: " + e.getMessage());
-        }
+
+        var token = this.authUserService.execute(authUserRequestDto);
+        return ResponseEntity.status(HttpStatus.OK).body(token);
+
     }
 
     @PutMapping("/update/{id}")
     public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody UpdateUserDto updateUserDto) {
-        try {
-            var result = this.userService.updateUser(id, updateUserDto);
-            return ResponseEntity.status(HttpStatus.OK).body(result);
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Ocorreu um erro interno no servidor");
-        }
+        var result = this.userService.updateUser(id, updateUserDto);
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+
     }
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteUser(@PathVariable Long id) {
-        try {
-            this.userService.deleteUser(id);
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Usuário deletado com sucesso");
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Ocorreu um erro interno no servidor");
-        }
+
+        this.userService.deleteUser(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Usuário deletado com sucesso");
+
+    }
+
+    @GetMapping("/get")
+    public ResponseEntity<?> getAllUsers() {
+        var result = this.userService.getAll();
+        return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
 
