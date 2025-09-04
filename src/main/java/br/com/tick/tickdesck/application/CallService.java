@@ -1,14 +1,11 @@
 package br.com.tick.tickdesck.application;
 
-import br.com.tick.tickdesck.application.dto.CallRequestDto;
+import br.com.tick.tickdesck.application.dto.CreateCallDto;
+import br.com.tick.tickdesck.application.dto.UpdateCallDto;
 import br.com.tick.tickdesck.domain.call.CallsEntity;
-import br.com.tick.tickdesck.domain.user.UserEntity;
 import br.com.tick.tickdesck.infraestructure.calls.CallRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class CallService {
@@ -16,16 +13,14 @@ public class CallService {
     @Autowired
     private CallRepository callRepository;
 
-    public CallsEntity createCall(CallRequestDto callRequestDto) {
+    public CallsEntity createCall(CreateCallDto callRequestDto) {
 
-        if (callRequestDto.emailEnvio().isEmpty() || callRequestDto.usernameEnvio().isEmpty()) {
+        if (callRequestDto.emailEnvio().isEmpty() || callRequestDto.usernameEnvio().isEmpty()|| callRequestDto.urgencia() == 0) {
             throw new IllegalArgumentException("Campos obrigatórios.");
         }
 
-
-
         CallsEntity callEntity = new CallsEntity();
-        callEntity.setEmailEnvio(callRequestDto.usernameEnvio());
+        callEntity.setEmailEnvio(callRequestDto.emailEnvio());
         callEntity.setUsernameEnvio(callRequestDto.usernameEnvio());
         callEntity.setUrgencia(callRequestDto.urgencia());
 
@@ -37,16 +32,12 @@ public class CallService {
                 .orElseThrow(() -> new IllegalArgumentException("Chamado não encontrado"));
     }
 
-    public CallsEntity updateCall(int callNumber, CallRequestDto updatedCallDto) {
+    public CallsEntity updateCall(int callNumber, UpdateCallDto updatedCallDto) {
         CallsEntity existingCall = callRepository.findByCallNumber(callNumber)
                 .orElseThrow(() -> new IllegalArgumentException("Chamado não encontrado"));
 
-        existingCall.setEmailEnvio(updatedCallDto.emailEnvio());
-        existingCall.setUsernameEnvio(updatedCallDto.usernameEnvio());
-        existingCall.setUrgencia(updatedCallDto.urgencia());
         existingCall.setPrevisaoSolucao(updatedCallDto.previsaoSolucao());
-
-        // Update other fields as needed
+        existingCall.setDataFechamento(updatedCallDto.dataFechamento());
 
         return callRepository.save(existingCall);
     }

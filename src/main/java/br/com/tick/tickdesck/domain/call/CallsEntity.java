@@ -2,8 +2,8 @@ package br.com.tick.tickdesck.domain.call;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import org.springframework.format.annotation.DateTimeFormat;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -14,9 +14,9 @@ public class CallsEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int callNumber;
     @Column(name = "email_envio", nullable = false)
-    public String emailEnvio;
+    private String emailEnvio;
     @Column(name = "username_envio", nullable = false)
-    public String usernameEnvio;
+    private String usernameEnvio;
 
     private Long idEquipe;
     private Long idUsuarioResponsavel;
@@ -25,10 +25,7 @@ public class CallsEntity {
     private int urgencia;
 
     @Column(name = "previsao_solucao")
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDateTime previsaoSolucao;
-
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDate previsaoSolucao;
     @Column(name = "data_fechamento")
     private LocalDateTime dataFechamento;
 

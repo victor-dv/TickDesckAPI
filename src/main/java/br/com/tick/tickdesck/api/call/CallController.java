@@ -1,15 +1,13 @@
 package br.com.tick.tickdesck.api.call;
 
 import br.com.tick.tickdesck.application.CallService;
-import br.com.tick.tickdesck.application.dto.CallRequestDto;
-import br.com.tick.tickdesck.domain.call.CallsEntity;
+import br.com.tick.tickdesck.application.dto.CreateCallDto;
+import br.com.tick.tickdesck.application.dto.UpdateCallDto;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/calls")
@@ -19,7 +17,7 @@ public class CallController {
     private CallService callService;
 
     @PostMapping("/")
-    public ResponseEntity<?> createCall(@Valid @RequestBody CallRequestDto callRequestDto) {
+    public ResponseEntity<?> createCall(@Valid @RequestBody CreateCallDto callRequestDto) {
         try {
             var result = this.callService.createCall(callRequestDto);
             return ResponseEntity.ok(result);
@@ -43,7 +41,7 @@ public class CallController {
         }
     }
     @PutMapping("/{callNumber}")
-    public ResponseEntity<?> updateCall(@PathVariable int callNumber, @RequestBody CallRequestDto updatedCallDto) {
+    public ResponseEntity<?> updateCall(@PathVariable int callNumber, @RequestBody UpdateCallDto updatedCallDto) {
         try {
             var result = this.callService.updateCall(callNumber, updatedCallDto);
             return ResponseEntity.ok(result);
