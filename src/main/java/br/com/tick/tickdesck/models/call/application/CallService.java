@@ -1,9 +1,9 @@
-package br.com.tick.tickdesck.application;
+package br.com.tick.tickdesck.models.call.application;
 
-import br.com.tick.tickdesck.application.dto.CreateCallDto;
-import br.com.tick.tickdesck.application.dto.UpdateCallDto;
-import br.com.tick.tickdesck.domain.call.CallsEntity;
-import br.com.tick.tickdesck.infraestructure.calls.CallRepository;
+import br.com.tick.tickdesck.models.call.application.dto.CreateCallDto;
+import br.com.tick.tickdesck.models.call.application.dto.UpdateCallDto;
+import br.com.tick.tickdesck.models.call.domain.CallsEntity;
+import br.com.tick.tickdesck.models.call.infra.CallRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -1,8 +1,8 @@
 package br.com.tick.tickdesck.api.call;
 
-import br.com.tick.tickdesck.application.CallService;
-import br.com.tick.tickdesck.application.dto.CreateCallDto;
-import br.com.tick.tickdesck.application.dto.UpdateCallDto;
+import br.com.tick.tickdesck.models.call.application.CallService;
+import br.com.tick.tickdesck.models.call.application.dto.CreateCallDto;
+import br.com.tick.tickdesck.models.call.application.dto.UpdateCallDto;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

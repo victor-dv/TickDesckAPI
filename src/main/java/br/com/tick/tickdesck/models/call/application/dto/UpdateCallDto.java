@@ -1,4 +1,4 @@
-package br.com.tick.tickdesck.application.dto;
+package br.com.tick.tickdesck.models.call.application.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.format.annotation.DateTimeFormat;
