@@ -63,5 +63,11 @@ public class UserController {
 
     }
 
+    @GetMapping("/get")
+    public ResponseEntity<?> getAllUsers() {
+        var result = this.userService.getAll();
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
+
 
 }

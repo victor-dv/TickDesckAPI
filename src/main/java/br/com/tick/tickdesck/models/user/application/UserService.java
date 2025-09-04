@@ -9,6 +9,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserService {
 
@@ -77,7 +79,7 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    /*Função para deletar um usuário
+    /* Função para deletar um usuário
      * Verifica se o usuário autenticado tem papel ADMIN ou GERENTE
      * Se não tiver, lança uma exceção
      * Se tiver, busca o usuário pelo id
@@ -100,6 +102,10 @@ public class UserService {
         //Deletando o usuário
         userRepository.delete(user);
         return user;
+    }
+
+    public List<UserEntity> getAll() {
+        return userRepository.findAll();
     }
 
 }
