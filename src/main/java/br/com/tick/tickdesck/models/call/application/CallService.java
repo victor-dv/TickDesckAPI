@@ -1,5 +1,6 @@
 package br.com.tick.tickdesck.models.call.application;
 
+import br.com.tick.tickdesck.models.call.application.dto.ClientUpdateCallDto;
 import br.com.tick.tickdesck.models.call.application.dto.CreateCallDto;
 import br.com.tick.tickdesck.models.call.application.dto.UpdateCallDto;
 import br.com.tick.tickdesck.models.call.domain.CallsEntity;
@@ -15,7 +16,7 @@ public class CallService {
 
     public CallsEntity createCall(CreateCallDto callRequestDto) {
 
-        if (callRequestDto.emailEnvio().isEmpty() || callRequestDto.usernameEnvio().isEmpty()|| callRequestDto.urgencia() == 0) {
+        if (callRequestDto.emailEnvio().isEmpty() || callRequestDto.usernameEnvio().isEmpty() || callRequestDto.urgencia() == 0) {
             throw new IllegalArgumentException("Campos obrigatórios.");
         }
 
@@ -23,6 +24,7 @@ public class CallService {
         callEntity.setEmailEnvio(callRequestDto.emailEnvio());
         callEntity.setUsernameEnvio(callRequestDto.usernameEnvio());
         callEntity.setUrgencia(callRequestDto.urgencia());
+        callEntity.setPrevisaoSolucao(callRequestDto.previsaoSolucao());
 
         return callRepository.save(callEntity);
     }
@@ -36,8 +38,21 @@ public class CallService {
         CallsEntity existingCall = callRepository.findByCallNumber(callNumber)
                 .orElseThrow(() -> new IllegalArgumentException("Chamado não encontrado"));
 
-        existingCall.setPrevisaoSolucao(updatedCallDto.previsaoSolucao());
         existingCall.setDataFechamento(updatedCallDto.dataFechamento());
+        existingCall.setUsuarioFechamento(updatedCallDto.usuarioFechamento());
+        existingCall.setUrgencia(updatedCallDto.urgencia());
+
+        return callRepository.save(existingCall);
+    }
+
+    public CallsEntity clientUpdateCall(int callNumber, ClientUpdateCallDto clientUpdateCallDto) {
+        CallsEntity existingCall = callRepository.findByCallNumber(callNumber)
+                .orElseThrow(() -> new IllegalArgumentException("Chamado não encontrado"));
+
+        existingCall.setEmailEnvio(clientUpdateCallDto.emailEnvio());
+        existingCall.setUsernameEnvio(clientUpdateCallDto.usernameEnvio());
+        existingCall.setUrgencia(clientUpdateCallDto.urgencia());
+        existingCall.setPrevisaoSolucao(clientUpdateCallDto.previsaoSolucao());
 
         return callRepository.save(existingCall);
     }

@@ -1,6 +1,7 @@
 package br.com.tick.tickdesck.api.call;
 
 import br.com.tick.tickdesck.models.call.application.CallService;
+import br.com.tick.tickdesck.models.call.application.dto.ClientUpdateCallDto;
 import br.com.tick.tickdesck.models.call.application.dto.CreateCallDto;
 import br.com.tick.tickdesck.models.call.application.dto.UpdateCallDto;
 import jakarta.validation.Valid;
@@ -10,7 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/calls")
+@RequestMapping("api/calls")
 public class CallController {
 
     @Autowired
@@ -44,9 +45,22 @@ public class CallController {
     public ResponseEntity<?> updateCall(@PathVariable int callNumber, @RequestBody UpdateCallDto updatedCallDto) {
         try {
             var result = this.callService.updateCall(callNumber, updatedCallDto);
+
             return ResponseEntity.ok(result);
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Chamado não encontrado " + e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Ocorreu um erro interno no servidor");
+        }
+    }
+    @PutMapping("/client/{callNumber}")
+    public ResponseEntity<?> clientUpdateCall(@PathVariable int callNumber, @RequestBody ClientUpdateCallDto clientUpdateCallDto) {
+        try {
+            var result = this.callService.clientUpdateCall(callNumber, clientUpdateCallDto);
+
+            return ResponseEntity.ok(result);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Chamado não encontrado " + e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Ocorreu um erro interno no servidor");
         }
