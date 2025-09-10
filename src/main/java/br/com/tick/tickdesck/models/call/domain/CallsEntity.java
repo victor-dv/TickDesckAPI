@@ -17,6 +17,8 @@ public class CallsEntity {
     private String emailEnvio;
     @Column(name = "username_envio", nullable = false)
     private String usernameEnvio;
+    @Column(nullable = false)
+    private boolean status;
 
     private Long idEquipe;
     private Long idUsuarioResponsavel;
@@ -31,6 +33,8 @@ public class CallsEntity {
 
     @Column(name = "usuario_fechamento")
     private Long usuarioFechamento;
+
+
 
 }
 

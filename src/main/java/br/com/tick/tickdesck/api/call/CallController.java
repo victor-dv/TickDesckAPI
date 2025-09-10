@@ -17,52 +17,60 @@ public class CallController {
     @Autowired
     private CallService callService;
 
+    // rota para criar um chamado
     @PostMapping("/")
     public ResponseEntity<?> createCall(@Valid @RequestBody CreateCallDto callRequestDto) {
         try {
             var result = this.callService.createCall(callRequestDto);
-            return ResponseEntity.ok(result);
+            return ResponseEntity.status(HttpStatus.CREATED).body(result);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Ocorreu um erro interno no servidor");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro interno do servidor");
         }
     }
 
+    //Rota para listar um chamado pelo número do chamado
     @GetMapping("/{callNumber}")
-    public ResponseEntity<?> callsList(@PathVariable int callNumber) {
+    public ResponseEntity<?> getCall(@PathVariable int callNumber) {
         try {
-            var result = this.callService.callsList(callNumber);
-
-          return ResponseEntity.ok(result);
-        }
-        catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Chamado não encontrado");
-        }
-        catch (ExceptionInInitializerError e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Ocorreu um erro interno no servidor");
+            var result = this.callService.getCall(callNumber);
+            return ResponseEntity.status(HttpStatus.OK).body(result);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro interno do servidor");
         }
     }
+
+    //  Rota para listar todos os chamados
+    @GetMapping("/list")
+    public ResponseEntity<?> listCalls() {
+        try {
+            var result = this.callService.ListCall();
+            return ResponseEntity.status(HttpStatus.OK).body(result);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro interno do servidor");
+        }
+    }
+
+    //Rota para atualizar um chamado pelo número do chamado
     @PutMapping("/{callNumber}")
     public ResponseEntity<?> updateCall(@PathVariable int callNumber, @RequestBody UpdateCallDto updatedCallDto) {
         try {
             var result = this.callService.updateCall(callNumber, updatedCallDto);
-
-            return ResponseEntity.ok(result);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Chamado não encontrado " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.OK).body(result);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Ocorreu um erro interno no servidor");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro interno do servidor");
+
         }
     }
-    @PutMapping("/client/{callNumber}")
-    public ResponseEntity<?> clientUpdateCall(@PathVariable int callNumber, @RequestBody ClientUpdateCallDto clientUpdateCallDto) {
-        try {
-            var result = this.callService.clientUpdateCall(callNumber, clientUpdateCallDto);
 
-            return ResponseEntity.ok(result);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Chamado não encontrado " + e.getMessage());
+    //Rota para deletar um chamado pelo número do chamado
+    @DeleteMapping("/{callNumber}")
+    public ResponseEntity<?> deleteCall(@PathVariable int callNumber) {
+        try {
+            var result = this.callService.deleteCall(callNumber);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(result);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Ocorreu um erro interno no servidor");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro interno do servidor");
+
         }
     }
 }
