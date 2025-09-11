@@ -39,6 +39,26 @@ public class CallController {
         }
     }
 
+    @GetMapping("/team/{idEquipe}")
+    public ResponseEntity<?> getCallByTeam(@PathVariable Long idEquipe) {
+        try {
+            var result = this.callService.callByTeam(idEquipe);
+            return ResponseEntity.status(HttpStatus.OK).body(result);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro interno do servidor");
+        }
+    }
+
+    @GetMapping("/client/{id}")
+    public ResponseEntity<?> getCallByClient(@PathVariable Long id) {
+        try {
+            var result = this.callService.callByClient(id);
+            return ResponseEntity.status(HttpStatus.OK).body(result);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro interno do servidor");
+        }
+    }
+
     //  Rota para listar todos os chamados
     @GetMapping("/list")
     public ResponseEntity<?> listCalls() {
@@ -46,13 +66,14 @@ public class CallController {
             var result = this.callService.ListCall();
             return ResponseEntity.status(HttpStatus.OK).body(result);
         } catch (Exception e) {
+            System.out.println(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro interno do servidor");
         }
     }
 
     //Rota para atualizar um chamado pelo número do chamado
     @PutMapping("/{callNumber}")
-    public ResponseEntity<?> updateCall(@PathVariable int callNumber, @RequestBody UpdateCallDto updatedCallDto) {
+    public ResponseEntity<?> updateCall(@Valid @PathVariable int callNumber, @RequestBody UpdateCallDto updatedCallDto) {
         try {
             var result = this.callService.updateCall(callNumber, updatedCallDto);
             return ResponseEntity.status(HttpStatus.OK).body(result);
