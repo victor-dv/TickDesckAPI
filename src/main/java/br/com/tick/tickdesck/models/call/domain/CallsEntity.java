@@ -1,6 +1,7 @@
 package br.com.tick.tickdesck.models.call.domain;
 
 import jakarta.persistence.*;
+import jakarta.websocket.OnMessage;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -17,7 +18,13 @@ public class CallsEntity {
     private String emailEnvio;
     @Column(name = "username_envio", nullable = false)
     private String usernameEnvio;
+    @Column(nullable = false)
 
+    //status do chamado, se ele está ativo ou não
+    private boolean status = true; // true = aberto, false = fechado
+
+    //    id do requerente do chamado
+    private Long idCliente;
     private Long idEquipe;
     private Long idUsuarioResponsavel;
 
