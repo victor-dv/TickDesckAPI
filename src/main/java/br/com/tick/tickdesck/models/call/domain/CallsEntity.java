@@ -21,10 +21,14 @@ public class CallsEntity {
     @Column(nullable = false)
 
     //status do chamado, se ele está ativo ou não
-    private boolean status = true; // true = aberto, false = fechado
+    private boolean status = true;
 
+    @Column(name = "id_empresa", nullable = false)
+    private Long idEmpresa;
     //    id do requerente do chamado
+    @Column(name = "id_cliente", nullable = false)
     private Long idCliente;
+    @Column(name = "id_equipe", nullable = false)
     private Long idEquipe;
     private Long idUsuarioResponsavel;
 

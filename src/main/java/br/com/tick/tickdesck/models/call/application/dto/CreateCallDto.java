@@ -14,6 +14,8 @@ public record CreateCallDto(
         @NotNull(message = "É necessário o id do requerente do chamado")
         Long idCliente,
         @NotNull(message = "É necessário o id da empresa")
+        Long idEmpresa,
+        @NotNull(message = "É necessário o id da empresa")
         long idEquipe,
         @NotBlank(message = "É necessário um email de envio do chamado")
         @Email(message = "Email inválido", regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$")
@@ -27,6 +29,7 @@ public record CreateCallDto(
 
         @Column(name = "Status", nullable = false)
         boolean status,
+
 
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
         LocalDate previsaoSolucao

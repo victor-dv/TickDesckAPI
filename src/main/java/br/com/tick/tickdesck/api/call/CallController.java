@@ -39,6 +39,16 @@ public class CallController {
         }
     }
 
+    @GetMapping("/business/{idEmpresa}")
+    public ResponseEntity<?> getCallByBusiness(@PathVariable Long idEmpresa) {
+        try {
+            var result = this.callService.callByBusiness(idEmpresa);
+            return ResponseEntity.status(HttpStatus.OK).body(result);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro interno do servidor");
+        }
+    }
+
     @GetMapping("/team/{idEquipe}")
     public ResponseEntity<?> getCallByTeam(@PathVariable Long idEquipe) {
         try {

@@ -22,6 +22,7 @@ public class CallService {
 
 
         CallsEntity callEntity = new CallsEntity();
+        callEntity.setIdEmpresa(callRequestDto.idEmpresa());
         callEntity.setIdCliente(callRequestDto.idCliente());
         callEntity.setEmailEnvio(callRequestDto.emailEnvio());
         callEntity.setIdEquipe(callRequestDto.idEquipe());
@@ -60,6 +61,15 @@ public class CallService {
         List<CallsEntity> calls = callRepository.findByIdEquipeAndStatusTrue(idEquipe);
         if (calls.isEmpty()) {
             throw new IllegalArgumentException("Nenhum chamado encontrado para a equipe");
+        }
+        return calls;
+    }
+
+    public List<CallsEntity> callByBusiness(Long idEmpresa) {
+
+        List<CallsEntity> calls = callRepository.findByidEmpresaAndStatusTrue(idEmpresa);
+        if (calls.isEmpty()) {
+            throw new IllegalArgumentException("Nenhum chamado encontrado para a empresa");
         }
         return calls;
     }
