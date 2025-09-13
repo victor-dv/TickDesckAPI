@@ -6,10 +6,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("api/team")
@@ -22,5 +19,10 @@ public class TeamController {
     public ResponseEntity<?> createTeam(@Valid @RequestBody CreateTeamDto createTeamDto) {
         var result = this.teamService.createTeam(createTeamDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(result);
+    }
+    @PutMapping("/update/{id}")
+    public ResponseEntity<?> updateTeam(@PathVariable Long id, @RequestBody CreateTeamDto createTeamDto) {
+        var result = this.teamService.update(id, createTeamDto);
+        return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 }
