@@ -20,9 +20,16 @@ public class TeamController {
         var result = this.teamService.createTeam(createTeamDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
+
     @PutMapping("/update/{id}")
     public ResponseEntity<?> updateTeam(@PathVariable Long id, @RequestBody CreateTeamDto createTeamDto) {
         var result = this.teamService.update(id, createTeamDto);
         return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> deleteTeam(@PathVariable Long id) {
+        var result = this.teamService.delete(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

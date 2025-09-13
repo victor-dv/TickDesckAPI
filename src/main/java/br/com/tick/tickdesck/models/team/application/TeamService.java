@@ -67,4 +67,22 @@ public class TeamService {
         return teamRepository.save(team);
     }
 
+    public TeamEntity delete(Long id) {
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
+        //Buscando o usuário autenticado no banco de dados
+        var loggedUser = userRepository.findById(Long.decode((String) authentication.getName()))
+                .orElseThrow(() -> new RuntimeException("Usuário autenticado não encontrado"));
+        //Verificando se o usuário tem papel ADMIN ou GERENTE
+        if (!loggedUser.getRole().equals(Role.ADMIN) && !loggedUser.getRole().equals(Role.GERENT)) {
+            throw new RuntimeException("Apenas usuários com papel ADMIN ou GERENT podem deletar uma equipe");
+        }
+
+        var team = teamRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Equipe não encontrada"));
+
+        teamRepository.delete(team);
+        return team;
+    }
+
+
 }

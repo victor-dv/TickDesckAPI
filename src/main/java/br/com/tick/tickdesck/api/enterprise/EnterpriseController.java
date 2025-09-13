@@ -38,4 +38,5 @@ public class EnterpriseController {
         var result = this.enterpriseService.getAll();
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
+
 }
