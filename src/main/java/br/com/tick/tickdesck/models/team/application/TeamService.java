@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class TeamService {
 
@@ -82,6 +84,10 @@ public class TeamService {
 
         teamRepository.delete(team);
         return team;
+    }
+
+    public List<TeamEntity> getAll() {
+        return teamRepository.findAll();
     }
 
 

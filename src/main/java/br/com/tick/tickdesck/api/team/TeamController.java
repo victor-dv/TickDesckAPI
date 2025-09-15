@@ -32,4 +32,10 @@ public class TeamController {
         var result = this.teamService.delete(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
+
+    @GetMapping("/get")
+    public ResponseEntity<?> getAllTeams() {
+        var result = this.teamService.getAll();
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
 }
