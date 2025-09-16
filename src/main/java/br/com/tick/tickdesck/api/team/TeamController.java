@@ -2,6 +2,7 @@ package br.com.tick.tickdesck.api.team;
 
 import br.com.tick.tickdesck.models.team.application.TeamService;
 import br.com.tick.tickdesck.models.team.application.dto.CreateTeamDto;
+import br.com.tick.tickdesck.models.team.application.dto.ResponseTeamDto;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,13 +18,13 @@ public class TeamController {
 
     @PostMapping("/create")
     public ResponseEntity<?> createTeam(@Valid @RequestBody CreateTeamDto createTeamDto) {
-        var result = this.teamService.createTeam(createTeamDto);
+        var result = ResponseTeamDto.fromTeamEntity(this.teamService.createTeam(createTeamDto));
         return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
 
     @PutMapping("/update/{id}")
     public ResponseEntity<?> updateTeam(@PathVariable Long id, @RequestBody CreateTeamDto createTeamDto) {
-        var result = this.teamService.update(id, createTeamDto);
+        var result = ResponseTeamDto.fromTeamEntity(this.teamService.update(id, createTeamDto));
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
@@ -35,7 +36,7 @@ public class TeamController {
 
     @GetMapping("/get")
     public ResponseEntity<?> getAllTeams() {
-        var result = this.teamService.getAll();
+        var result = this.teamService.getAll().stream().map(ResponseTeamDto ::fromTeamEntity).toList();
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 }
