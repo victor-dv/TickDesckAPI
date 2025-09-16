@@ -1,5 +1,7 @@
 package br.com.tick.tickdesck.models.user.application;
 
+import br.com.tick.tickdesck.models.team.infra.TeamRepository;
+import br.com.tick.tickdesck.models.user.application.dto.RegisterUserDto;
 import br.com.tick.tickdesck.models.user.application.dto.Role;
 import br.com.tick.tickdesck.models.user.application.dto.UpdateUserDto;
 import br.com.tick.tickdesck.models.user.domain.UserEntity;
@@ -21,37 +23,50 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private TeamRepository teamRepository;
+
     /*Função para criar um usuário
     *Verifica se o usuário já existe pelo username ou email
     *Se existir, lança uma exceção
     *Se não existir, salva o usuário no repositório
     Retorna o usuário criado */
-    public UserEntity createUser(UserEntity userEntity) {
-        //Pegando o usuario autenticado
+    public UserEntity createUser(RegisterUserDto registerUserDto) {
+        // Pegando o usuário autenticado
         var authentication = SecurityContextHolder.getContext().getAuthentication();
-        //Buscando o usuario autenticado no banco de dados
-        var loggedUser = userRepository.findById(Long.decode((String) authentication.getName()))
+
+        // Buscando o usuário autenticado no banco de dados
+        var loggedUser = userRepository.findById(Long.parseLong(authentication.getName()))
                 .orElseThrow(() -> new RuntimeException("Usuário autenticado não encontrado"));
 
+        // Checando permissões
         if (!loggedUser.getRole().equals(Role.ADMIN) && !loggedUser.getRole().equals(Role.GERENT)) {
             throw new RuntimeException("Apenas usuários com papel ADMIN ou GERENTE podem criar novos usuários");
         }
-        //Verificando se o usuário já existe pelo username ou email
-        userRepository.findByEmailOrUsername(userEntity.getEmail(), userEntity.getUsername())
+
+        // Verificando se o usuário já existe pelo username ou email
+        userRepository.findByEmailOrUsername(registerUserDto.email(), registerUserDto.username())
                 .ifPresent(user -> {
                     throw new RuntimeException("Usuário já existe");
                 });
 
-        userEntity.setPassword(passwordEncoder.encode(userEntity.getPassword()));
+        // Criando a entidade do usuário
+        UserEntity userEntity = new UserEntity();
+        userEntity.setName(registerUserDto.name());
+        userEntity.setUsername(registerUserDto.username());
+        userEntity.setEmail(registerUserDto.email());
+        userEntity.setPassword(passwordEncoder.encode(registerUserDto.password()));
+        userEntity.setRole(registerUserDto.role() != null ? registerUserDto.role() : Role.CLIENT);
 
-        //Se o papel do usuário não for definido, define como ADMIN por padrão
-        if (userEntity.getRole() == null) {
-            userEntity.setRole(Role.CLIENT);
-        }
+        // Buscando e atribuindo o time
+        var team = teamRepository.findById(registerUserDto.teamId())
+                .orElseThrow(() -> new RuntimeException("Time não encontrado"));
+        userEntity.setTeamEntity(team);
 
-        //Salvando o usuário no repositório
+        // Salvando o usuário no repositório
         return userRepository.save(userEntity);
     }
+
 
     /*Função para atualizar as informações do usuario
      * Pegamos o user através do id

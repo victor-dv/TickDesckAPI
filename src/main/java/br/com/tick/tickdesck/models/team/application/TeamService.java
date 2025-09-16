@@ -39,10 +39,6 @@ public class TeamService {
         TeamEntity team = new TeamEntity();
         team.setName(createTeamDto.name());
         team.setEnterprise(enterpise_id);
-        teamRepository.findByName(team.getName())
-                .ifPresent( team1-> {
-                    throw new RuntimeException("Essa equipe já existe");
-                });
 
         return teamRepository.save(team);
     }
