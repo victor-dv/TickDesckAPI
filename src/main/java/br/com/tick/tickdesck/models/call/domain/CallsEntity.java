@@ -1,11 +1,12 @@
 package br.com.tick.tickdesck.models.call.domain;
 
 import jakarta.persistence.*;
-import jakarta.websocket.OnMessage;
 import lombok.Data;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
@@ -42,6 +43,11 @@ public class CallsEntity {
 
     @Column(name = "usuario_fechamento")
     private Long usuarioFechamento;
+
+    @OneToMany
+    private List<Actions> acoes = new ArrayList<>();
+
+
 
 }
 
