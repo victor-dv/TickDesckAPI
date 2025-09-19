@@ -17,40 +17,32 @@ public class ActionController {
 
     @PostMapping("/")
     public ResponseEntity<?> createAction(@RequestBody ActionDto actionDto) {
-        try {
+
             var result = this.actionService.createAction(actionDto);
             return ResponseEntity.status(HttpStatus.CREATED).body(result);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-        }
+
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getAction(@PathVariable Long id) {
-        try {
+
             var result = this.actionService.getAction(id);
             return ResponseEntity.status(HttpStatus.OK).body(result);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro interno do servidor");
-        }
+
     }
     @PutMapping("/{id}")
     public ResponseEntity<?> updateAction(@PathVariable Long id, @RequestBody Actions updatedAction) {
-        try {
+
             var result = this.actionService.updateAction(id, updatedAction);
             return ResponseEntity.status(HttpStatus.OK).body(result);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro interno do servidor");
-        }
+
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteAction(@PathVariable Long id) {
-        try {
+
             var result = this.actionService.deleteAction(id);
             return ResponseEntity.status(HttpStatus.OK).body(result);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro interno do servidor");
-        }
+
     }
 }

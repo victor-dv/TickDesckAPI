@@ -9,6 +9,5 @@ import java.util.Optional;
 @Repository
 public interface ActionRepository extends JpaRepository<Actions,Long> {
 
-
     Optional<Actions> findById(Long id);
 }

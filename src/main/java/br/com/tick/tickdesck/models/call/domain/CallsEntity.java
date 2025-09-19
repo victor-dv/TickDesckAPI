@@ -44,7 +44,7 @@ public class CallsEntity {
     @Column(name = "usuario_fechamento")
     private Long usuarioFechamento;
 
-    @OneToMany
+    @OneToMany(mappedBy = "call", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Actions> acoes = new ArrayList<>();
 
 

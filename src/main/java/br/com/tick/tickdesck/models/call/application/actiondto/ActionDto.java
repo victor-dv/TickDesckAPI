@@ -9,11 +9,14 @@ import java.time.LocalDateTime;
 
 public record ActionDto (
 
+        Long callNumber,
+        Long id,
         @Length(max = 2500, message = "A descrição do problema deve ter no máximo 2500 caracteres")
         String description,
         Boolean publica,
         @JsonFormat(pattern = "dd-M-yyyy HH-mm-ss")
         LocalDateTime dataCadastro
+
 
 )
 {

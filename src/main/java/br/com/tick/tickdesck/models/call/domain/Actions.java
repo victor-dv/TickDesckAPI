@@ -1,6 +1,7 @@
 package br.com.tick.tickdesck.models.call.domain;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -18,9 +19,6 @@ public class Actions {
     @Column(name = "id_chamado")
     private Long idChamado;
 
-    @Column(name = "id_usuario")
-    private Long idUsuario;
-
     @Column(name = "descricao_acao")
     private String Description;
 
@@ -29,6 +27,12 @@ public class Actions {
 
     @Column(name = "data_cadastro", nullable = false)
     private LocalDateTime dataCadastro;
+
+    @ManyToOne
+    @JoinColumn(name = "call_number", referencedColumnName = "callNumber")
+    @JsonIgnore
+    private CallsEntity call;
+
 
 }
 
