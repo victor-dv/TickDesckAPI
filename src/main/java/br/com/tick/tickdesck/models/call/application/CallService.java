@@ -3,6 +3,7 @@ package br.com.tick.tickdesck.models.call.application;
 import br.com.tick.tickdesck.models.call.application.dto.CreateCallDto;
 import br.com.tick.tickdesck.models.call.application.dto.UpdateCallDto;
 import br.com.tick.tickdesck.models.call.domain.CallsEntity;
+import br.com.tick.tickdesck.models.call.infra.ActionRepository;
 import br.com.tick.tickdesck.models.call.infra.CallRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,11 +18,15 @@ public class CallService {
     @Autowired
     private CallRepository callRepository;
 
+    @Autowired
+    private ActionRepository actionRepository;
+
     // Cria um novo chamado a partir dos dados recebidos
     public CallsEntity createCall(CreateCallDto callRequestDto) {
 
 
         CallsEntity callEntity = new CallsEntity();
+        callEntity.setIdEmpresa(callRequestDto.idEmpresa());
         callEntity.setIdCliente(callRequestDto.idCliente());
         callEntity.setEmailEnvio(callRequestDto.emailEnvio());
         callEntity.setIdEquipe(callRequestDto.idEquipe());
@@ -29,6 +34,7 @@ public class CallService {
         callEntity.setStatus(callRequestDto.status());
         callEntity.setUrgencia(callRequestDto.urgencia());
         callEntity.setPrevisaoSolucao(callRequestDto.previsaoSolucao());
+
 
         // Salva o chamado no banco de dados
         return callRepository.save(callEntity);
@@ -60,6 +66,15 @@ public class CallService {
         List<CallsEntity> calls = callRepository.findByIdEquipeAndStatusTrue(idEquipe);
         if (calls.isEmpty()) {
             throw new IllegalArgumentException("Nenhum chamado encontrado para a equipe");
+        }
+        return calls;
+    }
+
+    public List<CallsEntity> callByBusiness(Long idEmpresa) {
+
+        List<CallsEntity> calls = callRepository.findByidEmpresaAndStatusTrue(idEmpresa);
+        if (calls.isEmpty()) {
+            throw new IllegalArgumentException("Nenhum chamado encontrado para a empresa");
         }
         return calls;
     }

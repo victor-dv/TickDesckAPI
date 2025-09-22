@@ -1,11 +1,12 @@
 package br.com.tick.tickdesck.models.call.domain;
 
 import jakarta.persistence.*;
-import jakarta.websocket.OnMessage;
 import lombok.Data;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
@@ -21,10 +22,14 @@ public class CallsEntity {
     @Column(nullable = false)
 
     //status do chamado, se ele está ativo ou não
-    private boolean status = true; // true = aberto, false = fechado
+    private boolean status = true;
 
+    @Column(name = "id_empresa", nullable = false)
+    private Long idEmpresa;
     //    id do requerente do chamado
+    @Column(name = "id_cliente", nullable = false)
     private Long idCliente;
+    @Column(name = "id_equipe", nullable = false)
     private Long idEquipe;
     private Long idUsuarioResponsavel;
 
@@ -38,6 +43,11 @@ public class CallsEntity {
 
     @Column(name = "usuario_fechamento")
     private Long usuarioFechamento;
+
+    @OneToMany(mappedBy = "call", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Actions> acoes = new ArrayList<>();
+
+
 
 }
 

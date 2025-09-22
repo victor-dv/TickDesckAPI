@@ -15,4 +15,6 @@ public interface CallRepository extends JpaRepository<CallsEntity,Long> {
     List<CallsEntity> findByStatusTrue();
     List<CallsEntity> findByIdClienteAndStatusTrue(Long idCliente);
     List<CallsEntity> findByIdEquipeAndStatusTrue(Long idEquipe);
+    List<CallsEntity> findByidEmpresaAndStatusTrue(Long idEmpresa);
+
 }
