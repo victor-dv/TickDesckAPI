@@ -1,6 +1,7 @@
 package br.com.tick.tickdesck.models.user.domain;
 
 
+import br.com.tick.tickdesck.models.team.domain.TeamEntity;
 import br.com.tick.tickdesck.models.user.application.dto.Role;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -19,6 +20,11 @@ public class UserEntity {
     @Column(nullable = false, unique = true)
     @Pattern(regexp = "\\S+", message = "O nome de usuário não pode conter espaços em branco")
     private String username;
+
+    @ManyToOne
+    @JoinColumn(name = "team_id", referencedColumnName = "id")
+    private TeamEntity teamEntity;
+
     @Email(message = "O email deve ser válido")
     private String email;
 

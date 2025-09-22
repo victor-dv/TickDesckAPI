@@ -3,6 +3,8 @@ package br.com.tick.tickdesck.api.user;
 import br.com.tick.tickdesck.models.user.application.dto.AuthUserRequestDto;
 import br.com.tick.tickdesck.models.user.application.AuthUserService;
 import br.com.tick.tickdesck.models.user.application.UserService;
+import br.com.tick.tickdesck.models.user.application.dto.RegisterUserDto;
+import br.com.tick.tickdesck.models.user.application.dto.ResponseUserDto;
 import br.com.tick.tickdesck.models.user.application.dto.UpdateUserDto;
 import br.com.tick.tickdesck.models.user.domain.UserEntity;
 import jakarta.validation.Valid;
@@ -26,9 +28,9 @@ public class UserController {
      *Se o usuário já existir, lança uma exceção e retorna uma mensagem de erro
      *Se o usuário for criado com sucesso, retorna o usuário criado */
     @PostMapping("/register")
-    public ResponseEntity<?> createUser(@Valid @RequestBody UserEntity userEntity) {
+    public ResponseEntity<?> createUser(@Valid @RequestBody RegisterUserDto registerUserDto) {
 
-        var result = this.userService.createUser(userEntity);
+        var result = ResponseUserDto.fromUser(this.userService.createUser(registerUserDto));
         return ResponseEntity.status(HttpStatus.CREATED).body(result);
 
     }
@@ -50,7 +52,7 @@ public class UserController {
 
     @PutMapping("/update/{id}")
     public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody UpdateUserDto updateUserDto) {
-        var result = this.userService.updateUser(id, updateUserDto);
+        var result = ResponseUserDto.fromUser(this.userService.updateUser(id, updateUserDto)) ;
         return ResponseEntity.status(HttpStatus.OK).body(result);
 
     }
@@ -65,7 +67,7 @@ public class UserController {
 
     @GetMapping("/get")
     public ResponseEntity<?> getAllUsers() {
-        var result = this.userService.getAll();
+        var result = this.userService.getAll().stream().map(ResponseUserDto::fromUser).toList();
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
