@@ -1,10 +1,8 @@
-package br.com.tick.tickdesck.models.call.application.actiondto;
+package br.com.tick.tickdesck.models.action_call.application.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import jakarta.validation.constraints.NotBlank;
 import org.hibernate.validator.constraints.Length;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public record ActionDto (

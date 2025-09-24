@@ -1,6 +1,6 @@
-package br.com.tick.tickdesck.models.call.infra;
+package br.com.tick.tickdesck.models.action_call.infra;
 
-import br.com.tick.tickdesck.models.call.domain.Actions;
+import br.com.tick.tickdesck.models.action_call.domain.Actions;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

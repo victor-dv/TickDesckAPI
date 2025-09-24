@@ -1,7 +1,6 @@
 package br.com.tick.tickdesck.api.call;
 
 import br.com.tick.tickdesck.models.call.application.CallService;
-import br.com.tick.tickdesck.models.call.application.dto.ClientUpdateCallDto;
 import br.com.tick.tickdesck.models.call.application.dto.CreateCallDto;
 import br.com.tick.tickdesck.models.call.application.dto.UpdateCallDto;
 import jakarta.validation.Valid;

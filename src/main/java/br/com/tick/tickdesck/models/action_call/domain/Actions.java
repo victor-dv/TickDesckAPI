@@ -1,11 +1,11 @@
-package br.com.tick.tickdesck.models.call.domain;
+package br.com.tick.tickdesck.models.action_call.domain;
 
 
+import br.com.tick.tickdesck.models.call.domain.CallsEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity

@@ -1,5 +1,6 @@
 package br.com.tick.tickdesck.models.call.domain;
 
+import br.com.tick.tickdesck.models.action_call.domain.Actions;
 import jakarta.persistence.*;
 import lombok.Data;
 

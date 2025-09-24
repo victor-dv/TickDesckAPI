@@ -1,8 +1,8 @@
 package br.com.tick.tickdesck.api.call;
 
-import br.com.tick.tickdesck.models.call.application.ActionService;
-import br.com.tick.tickdesck.models.call.application.actiondto.ActionDto;
-import br.com.tick.tickdesck.models.call.domain.Actions;
+import br.com.tick.tickdesck.models.action_call.application.ActionService;
+import br.com.tick.tickdesck.models.action_call.application.dto.ActionDto;
+import br.com.tick.tickdesck.models.action_call.domain.Actions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
