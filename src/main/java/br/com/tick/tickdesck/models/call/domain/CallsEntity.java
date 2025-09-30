@@ -1,8 +1,13 @@
 package br.com.tick.tickdesck.models.call.domain;
 
-import br.com.tick.tickdesck.models.action_call.domain.Actions;
+import br.com.tick.tickdesck.models.call.application.dto.UrgenciaCallDto;
+import br.com.tick.tickdesck.models.team.domain.TeamEntity;
+import br.com.tick.tickdesck.models.user.domain.UserEntity;
+import br.com.tick.tickdesck.models.user.domain.UserExternoEntity;
 import jakarta.persistence.*;
 import lombok.Data;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -15,38 +20,42 @@ public class CallsEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int callNumber;
-    @Column(name = "email_envio", nullable = false)
-    private String emailEnvio;
-    @Column(name = "username_envio", nullable = false)
-    private String usernameEnvio;
-    @Column(nullable = false)
+    private Long id;
 
-    //status do chamado, se ele está ativo ou não
+
+    private String title;
+
+    //Classe para referencia ao usuario que vem do email
+    //Obtemos apenas os valores de email e username
+    @ManyToOne
+    @JoinColumn(name = "userExterno_id", referencedColumnName = "id", nullable = false)
+    private UserExternoEntity userExterno;
+
+    @ManyToOne
+    @JoinColumn(name = "team_id", referencedColumnName = "id", nullable = false)
+    private TeamEntity team;
+
+    @Column(nullable = false)
     private boolean status = true;
 
-    @Column(name = "id_empresa", nullable = false)
-    private Long idEmpresa;
-    //    id do requerente do chamado
-    @Column(name = "id_cliente", nullable = false)
-    private Long idCliente;
-    @Column(name = "id_equipe", nullable = false)
-    private Long idEquipe;
-    private Long idUsuarioResponsavel;
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
+    private UserEntity userResponsavel;
 
     @Column(nullable = false)
-    private int urgencia;
+    @Enumerated(EnumType.STRING)
+    private UrgenciaCallDto urgencia = UrgenciaCallDto.BAIXA;
 
     @Column(name = "previsao_solucao")
     private LocalDate previsaoSolucao;
-    @Column(name = "data_fechamento")
-    private LocalDateTime dataFechamento;
 
-    @Column(name = "usuario_fechamento")
-    private Long usuarioFechamento;
+    @CreationTimestamp
+    @Column(name = "data_abertura", nullable = false, updatable = false)
+    private LocalDateTime dataAbertura;
 
-    @OneToMany(mappedBy = "call", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Actions> acoes = new ArrayList<>();
+    @UpdateTimestamp
+    @Column(name = "data_atualizacao", nullable = false)
+    private LocalDateTime dataAtualizacao;
 
 
 

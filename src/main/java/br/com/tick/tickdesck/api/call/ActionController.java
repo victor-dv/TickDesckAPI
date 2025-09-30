@@ -1,3 +1,4 @@
+/*
 package br.com.tick.tickdesck.api.call;
 
 import br.com.tick.tickdesck.models.action_call.application.ActionService;
@@ -46,3 +47,4 @@ public class ActionController {
 
     }
 }
+*/

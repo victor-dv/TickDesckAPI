@@ -3,8 +3,10 @@ package br.com.tick.tickdesck.models.call.application;
 import br.com.tick.tickdesck.models.call.application.dto.CreateCallDto;
 import br.com.tick.tickdesck.models.call.application.dto.UpdateCallDto;
 import br.com.tick.tickdesck.models.call.domain.CallsEntity;
-import br.com.tick.tickdesck.models.action_call.infra.ActionRepository;
 import br.com.tick.tickdesck.models.call.infra.CallRepository;
+import br.com.tick.tickdesck.models.team.infra.TeamRepository;
+import br.com.tick.tickdesck.models.user.infra.UserExternoRepository;
+import br.com.tick.tickdesck.models.user.infra.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,31 +21,42 @@ public class CallService {
     private CallRepository callRepository;
 
     @Autowired
-    private ActionRepository actionRepository;
+    private UserRepository userRepository;
+
+    @Autowired
+    private UserExternoRepository userExternoRepository;
+
+    @Autowired
+    private TeamRepository teamRepository;
 
     // Cria um novo chamado a partir dos dados recebidos
-    public CallsEntity createCall(CreateCallDto callRequestDto) {
+    public CallsEntity createCall(CreateCallDto createCallDto) {
+/*        var userExterno = userExternoRepository.findById(createCallDto.userExterId())
+                .orElseThrow(() -> new IllegalArgumentException("Usuário externo não encontrado"));*/
 
+        var userResponsavel = userRepository.findById(createCallDto.userResponsavelId())
+                .orElseThrow(() -> new IllegalArgumentException("Usuário responsável não encontrado"));
 
-        CallsEntity callEntity = new CallsEntity();
-        callEntity.setIdEmpresa(callRequestDto.idEmpresa());
-        callEntity.setIdCliente(callRequestDto.idCliente());
-        callEntity.setEmailEnvio(callRequestDto.emailEnvio());
-        callEntity.setIdEquipe(callRequestDto.idEquipe());
-        callEntity.setUsernameEnvio(callRequestDto.usernameEnvio());
-        callEntity.setStatus(callRequestDto.status());
-        callEntity.setUrgencia(callRequestDto.urgencia());
-        callEntity.setPrevisaoSolucao(callRequestDto.previsaoSolucao());
+        var team = teamRepository.findById(createCallDto.teamId())
+                .orElseThrow(() -> new IllegalArgumentException("Equipe não encontrada"));
 
+        var userExterno = userExternoRepository.findById(createCallDto.userExternoId())
+                .orElseThrow(() -> new IllegalArgumentException("Usuário externo não encontrado"));
 
-        // Salva o chamado no banco de dados
-        return callRepository.save(callEntity);
+        CallsEntity call = new CallsEntity();
+        call.setTitle(createCallDto.title());
+        call.setUserExterno(userExterno);
+        call.setUserResponsavel(userResponsavel);
+        call.setTeam(team);
+        call.setStatus(createCallDto.status());
+        call.setUrgencia(createCallDto.urgency());
 
+        return callRepository.save(call);
     }
 
     // Busca um chamado pelo número, lança exceção se não encontrar
-    public CallsEntity getCall(int callNumber) {
-        var call = callRepository.findByCallNumber(callNumber)
+    public CallsEntity getCall(Long id) {
+        CallsEntity call = callRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Chamado não encontrado"));
         if (!call.isStatus()) {
             throw new IllegalArgumentException("Chamado está fechado");
@@ -52,62 +65,44 @@ public class CallService {
     }
 
     // Lista todos os chamados, lança exceção se não houver nenhum
-    public ResponseEntity<List<CallsEntity>> ListCall() {
+    public List<CallsEntity> listCall() {
         List<CallsEntity> calls = callRepository.findByStatusTrue();
         if (calls.isEmpty()) {
             throw new IllegalArgumentException("Nenhum chamado encontrado");
         }
-        return ResponseEntity.status(HttpStatus.OK).body(calls);
-    }
-
-    //Lista chamados por equipe
-    public List<CallsEntity> callByTeam(Long idEquipe) {
-
-        List<CallsEntity> calls = callRepository.findByIdEquipeAndStatusTrue(idEquipe);
-        if (calls.isEmpty()) {
-            throw new IllegalArgumentException("Nenhum chamado encontrado para a equipe");
-        }
         return calls;
     }
 
-    public List<CallsEntity> callByBusiness(Long idEmpresa) {
-
-        List<CallsEntity> calls = callRepository.findByidEmpresaAndStatusTrue(idEmpresa);
-        if (calls.isEmpty()) {
-            throw new IllegalArgumentException("Nenhum chamado encontrado para a empresa");
-        }
-        return calls;
-    }
-
-    public List<CallsEntity> callByClient(Long id) {
-        List<CallsEntity> calls = callRepository.findByIdClienteAndStatusTrue(id);
-        if (calls.isEmpty()) {
-            throw new IllegalArgumentException("Nenhum chamado encontrado para o cliente");
-        }
-        return calls;
-    }
 
     // Atualiza os dados de um chamado existente
-    public CallsEntity updateCall(int callNumber, UpdateCallDto updatedCallDto) {
-        CallsEntity existingCall = callRepository.findByCallNumber(callNumber)
+    public CallsEntity updateCall(Long id, UpdateCallDto updatedCallDto) {
+        CallsEntity existingCall = callRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Chamado não encontrado"));
 
+        if (updatedCallDto.title() != null) {
+            existingCall.setTitle(updatedCallDto.title());
+        }
+        if (updatedCallDto.urgency() != null) {
+            existingCall.setUrgencia(updatedCallDto.urgency());
+        }
+
+      /*  if (updatedCallDto.usuarioFechamento() != null) {
+            existingCall.setUserResponsavel(updatedCallDto.usuarioFechamento());
+        }*/
+/*
         existingCall.setDataFechamento(updatedCallDto.dataFechamento());
-        existingCall.setUsuarioFechamento(updatedCallDto.usuarioFechamento());
-        existingCall.setUrgencia(updatedCallDto.urgencia());
+*/
 
         return callRepository.save(existingCall);
     }
 
     // Remove um chamado pelo número, retorna o chamado removido
-    public CallsEntity deleteCall(int callNumber) {
-        CallsEntity existingCall = callRepository.findByCallNumber(callNumber)
+    public CallsEntity deleteCall(Long id) {
+        CallsEntity existingCall = callRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Chamado não encontrado"));
 
-
-        existingCall.setStatus(!existingCall.isStatus());// Marca o chamado como fechado
-        callRepository.save(existingCall);// Salva a alteração no banco de dados
-        return existingCall;
+        existingCall.setStatus(false); // Fecha o chamado
+        return callRepository.save(existingCall);
     }
 
 }
