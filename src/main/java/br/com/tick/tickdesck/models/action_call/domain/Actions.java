@@ -2,11 +2,13 @@ package br.com.tick.tickdesck.models.action_call.domain;
 
 
 import br.com.tick.tickdesck.models.call.domain.CallsEntity;
+import br.com.tick.tickdesck.models.files.domain.FileEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Data
@@ -33,6 +35,8 @@ public class Actions {
     @JsonIgnore
     private CallsEntity call;
 
+    @OneToMany(mappedBy = "action", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<FileEntity> file;
 
 }
 

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import org.hibernate.validator.constraints.Length;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public record ActionDto (
 
@@ -13,7 +14,8 @@ public record ActionDto (
         String description,
         Boolean publica,
         @JsonFormat(pattern = "dd-M-yyyy HH-mm-ss")
-        LocalDateTime dataCadastro
+        LocalDateTime dataCadastro,
+        List<FileDto>files
 
 
 )
