@@ -54,6 +54,8 @@ public class CallService {
         return callRepository.save(call);
     }
 
+
+
     // Busca um chamado pelo número, lança exceção se não encontrar
     public CallsEntity getCall(Long id) {
         CallsEntity call = callRepository.findById(id)
@@ -66,7 +68,7 @@ public class CallService {
 
     // Lista todos os chamados, lança exceção se não houver nenhum
     public List<CallsEntity> listCall() {
-        List<CallsEntity> calls = callRepository.findByStatusTrue();
+        List<CallsEntity> calls = callRepository.findAll();
         if (calls.isEmpty()) {
             throw new IllegalArgumentException("Nenhum chamado encontrado");
         }

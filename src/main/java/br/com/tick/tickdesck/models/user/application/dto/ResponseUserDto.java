@@ -1,5 +1,6 @@
 package br.com.tick.tickdesck.models.user.application.dto;
 
+import br.com.tick.tickdesck.models.team.application.dto.ResponseTeamDto;
 import br.com.tick.tickdesck.models.user.domain.UserEntity;
 
 public record ResponseUserDto(
@@ -7,15 +8,21 @@ public record ResponseUserDto(
         String name,
         String username,
         String email,
-        Role role
+        Role role,
+        ResponseTeamDto team
 ) {
     public static ResponseUserDto fromUser(UserEntity userEntity) {
+        ResponseTeamDto teamDto = userEntity.getTeamEntity() != null
+                ? ResponseTeamDto.fromTeamEntity(userEntity.getTeamEntity())
+                : null;
+
         return new ResponseUserDto(
                 userEntity.getId(),
                 userEntity.getName(),
                 userEntity.getUsername(),
                 userEntity.getEmail(),
-                userEntity.getRole()
+                userEntity.getRole(),
+                teamDto
         );
     }
 }

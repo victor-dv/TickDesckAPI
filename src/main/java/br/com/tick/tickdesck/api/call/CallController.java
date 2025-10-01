@@ -2,15 +2,13 @@ package br.com.tick.tickdesck.api.call;
 
 import br.com.tick.tickdesck.models.call.application.CallService;
 import br.com.tick.tickdesck.models.call.application.dto.CreateCallDto;
+import br.com.tick.tickdesck.models.call.application.dto.ResponseCallDto;
 import br.com.tick.tickdesck.models.call.application.dto.UpdateCallDto;
 import br.com.tick.tickdesck.models.call.domain.CallsEntity;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("api/calls")
@@ -21,27 +19,32 @@ public class CallController {
     private CallService callService;
 
     @PostMapping
-    public ResponseEntity<CallsEntity> create(@RequestBody CreateCallDto dto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(callService.createCall(dto));
+    public ResponseEntity<ResponseCallDto> create(@RequestBody CreateCallDto dto) {
+        var result = ResponseCallDto.fromCallEntity(this.callService.createCall(dto));
+        return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CallsEntity> getById(@PathVariable Long id) {
-        return ResponseEntity.ok(callService.getCall(id));
+    public ResponseEntity<ResponseCallDto> getById(@PathVariable Long id) {
+        var result = ResponseCallDto.fromCallEntity(this.callService.getCall(id));
+        return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
-    @GetMapping
-    public ResponseEntity<List<CallsEntity>> list() {
-        return ResponseEntity.ok(callService.listCall());
+    @GetMapping("/")
+    public ResponseEntity<?> list() {
+        var result = this.callService.listCall().stream().map(ResponseCallDto::fromCallEntity).toList();
+        return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CallsEntity> update(@PathVariable Long id, @RequestBody UpdateCallDto dto) {
-        return ResponseEntity.ok(callService.updateCall(id, dto));
+    public ResponseEntity<ResponseCallDto> update(@PathVariable Long id, @RequestBody UpdateCallDto dto) {
+        var result = ResponseCallDto.fromCallEntity(this.callService.updateCall(id, dto));
+        return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<CallsEntity> delete(@PathVariable Long id) {
-        return ResponseEntity.ok(callService.deleteCall(id));
+        var result = this.callService.deleteCall(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(result);
     }
 }
