@@ -1,4 +1,4 @@
-package br.com.tick.tickdesck.api.call;
+package br.com.tick.tickdesck.models.call.application.controller;
 
 import br.com.tick.tickdesck.models.call.application.CallService;
 import br.com.tick.tickdesck.models.call.application.dto.CreateCallDto;
@@ -44,7 +44,7 @@ public class CallController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<CallsEntity> delete(@PathVariable Long id) {
-        var result = this.callService.deleteCall(id);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(result);
+       this.callService.deleteCall(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }
