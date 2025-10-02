@@ -32,13 +32,22 @@ public class FileService {
         //// Busca a entidade Actions pelo ID fornecido, lançando exceção se não existir
         Actions action = actionRepository.findById(actionId)
                 .orElseThrow(() -> new RuntimeException("Action not found with id: " + actionId));
+
+        // Define the upload directory path based on the company, call, and action IDs
+        Path uploadDir = Paths.get("uploads/Enterprise/" + action.getCall().getIdEmpresa() + "/chamados/" + action.getCall().getCallNumber() + "/acoes/" + action.getId() + "/");
+        // Checks if the directory does not exist
+        if (!Files.exists(uploadDir)) {
+            // Creates the directory and any nonexistent parent directories
+            Files.createDirectories(uploadDir);
+        }
+
         //// Obtém o nome original do arquivo enviado
         String fileName = fileData.getOriginalFilename();
         //// Lê o conteúdo do arquivo enviado como array de bytes
         byte[] fileContent = fileData.getBytes();
 
         //// Define o caminho onde o arquivo será salvo na pasta uploads
-        Path filePath = Paths.get("uploads/").resolve(fileName);
+        Path filePath = uploadDir.resolve(fileName);
         //// Escreve o conteúdo do arquivo no caminho definido
         Files.write(filePath, fileContent);
 
