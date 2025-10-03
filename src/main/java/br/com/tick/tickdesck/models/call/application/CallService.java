@@ -81,6 +81,11 @@ public class CallService {
         CallsEntity existingCall = callRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Chamado não encontrado"));
 
+        if (!existingCall.isStatus()) {
+            throw new IllegalArgumentException("Não é possível atualizar um chamado fechado.");
+        }
+
+
         if (updatedCallDto.title() != null) {
             existingCall.setTitle(updatedCallDto.title());
         }
@@ -106,5 +111,35 @@ public class CallService {
         existingCall.setStatus(false); // Fecha o chamado
         return callRepository.save(existingCall);
     }
+
+    public List<CallsEntity> callByTeam(Long idEquipe) {
+
+        List<CallsEntity> calls = callRepository.findByTeamIdAndStatusTrue(idEquipe);
+        if (calls.isEmpty()) {
+            throw new IllegalArgumentException("Nenhum chamado encontrado para a equipe");
+        }
+        return calls;
+    }
+
+
+    public List<CallsEntity> callByEnterprise(Long idEmpresa) {
+
+        List<CallsEntity> calls = callRepository.findByTeam_Enterprise_Id(idEmpresa);
+        if (calls.isEmpty()) {
+            throw new IllegalArgumentException("Nenhum chamado encontrado para a empresa");
+        }
+        return calls;
+    }
+
+    public List<CallsEntity> userResponsavel(Long idUser) {
+
+        List<CallsEntity> calls = callRepository.findByUserResponsavelIdAndStatusTrue(idUser);
+        if (calls.isEmpty()) {
+            throw new IllegalArgumentException("Nenhum chamado encontrado para o usuário");
+        }
+        return calls;
+    }
+
+
 
 }
