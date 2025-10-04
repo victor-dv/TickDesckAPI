@@ -1,6 +1,6 @@
 package br.com.tick.tickdesck.models.call.application.dto;
 
-public record   CreateCallDto (
+public record  CreateCallDto (
         String title,
         Long userExternoId,
         Long userResponsavelId,
