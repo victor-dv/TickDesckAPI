@@ -7,14 +7,17 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
-
 @Repository
-public interface CallRepository extends JpaRepository<CallsEntity,Long> {
+public interface CallRepository extends JpaRepository<CallsEntity, Long> {
 
-    Optional<CallsEntity> findByCallNumber(int callNumber);
+    Optional<CallsEntity> findById(Long id);
+
     List<CallsEntity> findByStatusTrue();
-    List<CallsEntity> findByIdClienteAndStatusTrue(Long idCliente);
-    List<CallsEntity> findByIdEquipeAndStatusTrue(Long idEquipe);
-    List<CallsEntity> findByidEmpresaAndStatusTrue(Long idEmpresa);
 
+    List<CallsEntity> findByUserExternoIdAndStatusTrue(Long userExternoId);
+
+    List<CallsEntity> findByTeamIdAndStatusTrue(Long teamId);
+    List<CallsEntity> findByTeam_Enterprise_Id(Long enterpriseId);
+
+    List<CallsEntity> findByUserResponsavelIdAndStatusTrue(Long userId);
 }

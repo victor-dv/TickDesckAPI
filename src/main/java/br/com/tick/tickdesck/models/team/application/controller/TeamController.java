@@ -1,4 +1,4 @@
-package br.com.tick.tickdesck.api.team;
+package br.com.tick.tickdesck.models.team.application.controller;
 
 import br.com.tick.tickdesck.models.team.application.TeamService;
 import br.com.tick.tickdesck.models.team.application.dto.CreateTeamDto;
@@ -30,7 +30,7 @@ public class TeamController {
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteTeam(@PathVariable Long id) {
-        var result = this.teamService.delete(id);
+        this.teamService.delete(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 

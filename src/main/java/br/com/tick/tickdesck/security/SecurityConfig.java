@@ -39,7 +39,8 @@ public class SecurityConfig {
                 //Exige autenticação para qualquer outra requisição
                 .authorizeHttpRequests(auth -> {
                     auth.requestMatchers("api/user/**").permitAll()
-                            .requestMatchers("api/calls/**").permitAll();
+                            .requestMatchers("api/calls/**").permitAll()
+                            .requestMatchers("api/actions/**").permitAll();
                     auth.anyRequest().authenticated();
                 })
                 //Adiciona o filtro de segurança personalizado antes do filtro de autenticação básica

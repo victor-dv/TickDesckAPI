@@ -1,4 +1,4 @@
-package br.com.tick.tickdesck.api.enterprise;
+package br.com.tick.tickdesck.models.enterprise.application.controller;
 
 import br.com.tick.tickdesck.models.enterprise.application.EnterpriseService;
 import br.com.tick.tickdesck.models.enterprise.application.dto.CreateEnterpriseDto;

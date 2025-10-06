@@ -1,12 +1,11 @@
-package br.com.tick.tickdesck.api.user;
+package br.com.tick.tickdesck.models.user.application.controller;
 
-import br.com.tick.tickdesck.models.user.application.dto.AuthUserRequestDto;
 import br.com.tick.tickdesck.models.user.application.AuthUserService;
 import br.com.tick.tickdesck.models.user.application.UserService;
+import br.com.tick.tickdesck.models.user.application.dto.AuthUserRequestDto;
 import br.com.tick.tickdesck.models.user.application.dto.RegisterUserDto;
 import br.com.tick.tickdesck.models.user.application.dto.ResponseUserDto;
 import br.com.tick.tickdesck.models.user.application.dto.UpdateUserDto;
-import br.com.tick.tickdesck.models.user.domain.UserEntity;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
