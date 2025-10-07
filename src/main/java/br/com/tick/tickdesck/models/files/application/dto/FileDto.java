@@ -1,4 +1,4 @@
-package br.com.tick.tickdesck.models.action_call.application.dto;
+package br.com.tick.tickdesck.models.files.application.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
