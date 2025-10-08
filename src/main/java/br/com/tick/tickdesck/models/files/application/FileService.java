@@ -1,7 +1,7 @@
 package br.com.tick.tickdesck.models.files.application;
 
-import br.com.tick.tickdesck.models.action_call.domain.Actions;
-import br.com.tick.tickdesck.models.action_call.infra.ActionRepository;
+import br.com.tick.tickdesck.models.auditoria_call.domain.ActionEntity;
+import br.com.tick.tickdesck.models.auditoria_call.repository.ActionRepository;
 import br.com.tick.tickdesck.models.files.domain.FileEntity;
 import br.com.tick.tickdesck.models.files.infra.FileRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,11 +31,11 @@ public class FileService {
     public FileEntity uploadFile(MultipartFile fileData, Long actionId) throws IOException {
 
         //// Busca a entidade Actions pelo ID fornecido, lançando exceção se não existir
-        Actions action = actionRepository.findById(actionId)
+        ActionEntity action = actionRepository.findById(actionId)
                 .orElseThrow(() -> new RuntimeException("Action not found with id: " + actionId));
 
         // Define the upload directory path based on the company, call, and action IDs
-        Path uploadDir = Paths.get("uploads/Enterprise/" + action.getCall().getIdEmpresa() + "/chamados/" + action.getCall().getCallNumber() + "/acoes/" + action.getId() + "/");
+        Path uploadDir = Paths.get("uploads/Enterprise/" + action.getCallsEntity().getTeam().getEnterprise().getId() + "/chamados/" + action.getCallsEntity().getId() + "/acoes/" + action.getId() + "/");
         // Checks if the directory does not exist
         if (!Files.exists(uploadDir)) {
             // Creates the directory and any nonexistent parent directories

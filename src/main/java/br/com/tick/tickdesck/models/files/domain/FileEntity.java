@@ -1,6 +1,7 @@
 package br.com.tick.tickdesck.models.files.domain;
 
-import br.com.tick.tickdesck.models.action_call.domain.Actions;
+import br.com.tick.tickdesck.models.auditoria_call.domain.ActionEntity;
+import br.com.tick.tickdesck.models.auditoria_call.domain.ActionEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -28,6 +29,6 @@ public class FileEntity {
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "action_id", referencedColumnName = "id")
-    private Actions action;
+    private ActionEntity action;
 
 }
