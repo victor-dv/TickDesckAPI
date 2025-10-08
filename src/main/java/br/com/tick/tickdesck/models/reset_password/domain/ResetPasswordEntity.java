@@ -5,15 +5,16 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Data
 @Entity
 public class ResetPasswordEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
     private String token;
     @OneToOne
     private UserEntity user;
-    private LocalDateTime expiryDate;
+    private LocalDateTime expirationDate;
 }
