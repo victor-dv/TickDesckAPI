@@ -123,5 +123,10 @@ public class UserService {
         return userRepository.findAll();
     }
 
+    public UserEntity getById(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+    }
+
 }
 
