@@ -5,6 +5,7 @@ import br.com.tick.tickdesck.models.team.application.dto.CreateTeamDto;
 import br.com.tick.tickdesck.models.team.domain.TeamEntity;
 import br.com.tick.tickdesck.models.team.infra.TeamRepository;
 import br.com.tick.tickdesck.models.user.application.dto.Role;
+import br.com.tick.tickdesck.models.user.domain.UserEntity;
 import br.com.tick.tickdesck.models.user.infra.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -84,6 +85,15 @@ public class TeamService {
 
     public List<TeamEntity> getAll() {
         return teamRepository.findAll();
+    }
+
+    public List<UserEntity> getTeamMembers(Long teamId) {
+        if (!teamRepository.existsById(teamId)) {
+            throw new RuntimeException("Equipe não encontrada com o ID: " + teamId);
+        }
+
+        // 2. Chamar o método customizado do UserRepository
+        return userRepository.findByTeamEntityId(teamId);
     }
 
 
