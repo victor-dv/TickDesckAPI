@@ -7,6 +7,7 @@ import org.aspectj.weaver.ast.Call;
 
 public record ResponseCallDto(
         Long id,
+        Integer numberCall,
         String title,
         Long userExternoId,
         ResponseUserDto userResponsavel,
@@ -25,6 +26,7 @@ public record ResponseCallDto(
 
         return new ResponseCallDto(
                 call.getId(),
+                call.getNumberCall(),
                 call.getTitle(),
                 call.getUserExterno().getId(),
                 userDto,

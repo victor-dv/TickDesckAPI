@@ -22,6 +22,8 @@ public class CallsEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false) // Boas práticas para um identificador
+    private Integer numberCall;
 
     private String title;
 
@@ -56,7 +58,6 @@ public class CallsEntity {
     @UpdateTimestamp
     @Column(name = "data_atualizacao", nullable = false)
     private LocalDateTime dataAtualizacao;
-
 
 
 }

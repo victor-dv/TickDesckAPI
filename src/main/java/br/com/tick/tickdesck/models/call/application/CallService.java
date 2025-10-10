@@ -12,7 +12,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 @Service
 public class CallService {
@@ -43,7 +46,11 @@ public class CallService {
         var userExterno = userExternoRepository.findById(createCallDto.userExternoId())
                 .orElseThrow(() -> new IllegalArgumentException("Usuário externo não encontrado"));
 
+        Integer ultimoNumero = callRepository.findLastNumeroByEmpresa(team.getEnterprise().getId());
+        int novoNumero = ultimoNumero + 1;
+
         CallsEntity call = new CallsEntity();
+        call.setNumberCall(novoNumero);
         call.setTitle(createCallDto.title());
         call.setUserExterno(userExterno);
         call.setUserResponsavel(userResponsavel);
@@ -139,7 +146,6 @@ public class CallService {
         }
         return calls;
     }
-
 
 
 }
