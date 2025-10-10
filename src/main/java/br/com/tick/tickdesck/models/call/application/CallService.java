@@ -2,6 +2,7 @@ package br.com.tick.tickdesck.models.call.application;
 
 import br.com.tick.tickdesck.models.call.application.dto.CreateCallDto;
 import br.com.tick.tickdesck.models.call.application.dto.UpdateCallDto;
+import br.com.tick.tickdesck.models.call.application.dto.UrgenciaCallDto;
 import br.com.tick.tickdesck.models.call.domain.CallsEntity;
 import br.com.tick.tickdesck.models.call.infra.CallRepository;
 import br.com.tick.tickdesck.models.team.infra.TeamRepository;
@@ -13,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
@@ -57,6 +59,7 @@ public class CallService {
         call.setTeam(team);
         call.setStatus(createCallDto.status());
         call.setUrgencia(createCallDto.urgency());
+        call.setPrevisaoSolucao(calcularPrevisao(createCallDto.urgency()));
 
         return callRepository.save(call);
     }
@@ -145,6 +148,19 @@ public class CallService {
             throw new IllegalArgumentException("Nenhum chamado encontrado para o usuário");
         }
         return calls;
+    }
+
+    private LocalDateTime calcularPrevisao(UrgenciaCallDto urgencia) {
+        LocalDateTime agora = LocalDateTime.now();
+
+        switch (urgencia) {
+            case BAIXA:
+                return agora.plusDays(5);
+            case ALTA:
+                return agora.plusDays(1);
+            default:
+                return agora.plusDays(3);
+        }
     }
 
 

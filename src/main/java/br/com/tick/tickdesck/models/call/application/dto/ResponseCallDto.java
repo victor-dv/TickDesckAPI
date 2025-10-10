@@ -5,6 +5,8 @@ import br.com.tick.tickdesck.models.team.application.dto.ResponseTeamDto;
 import br.com.tick.tickdesck.models.user.application.dto.ResponseUserDto;
 import org.aspectj.weaver.ast.Call;
 
+import java.time.LocalDateTime;
+
 public record ResponseCallDto(
         Long id,
         Integer numberCall,
@@ -13,7 +15,8 @@ public record ResponseCallDto(
         ResponseUserDto userResponsavel,
         boolean status,
         ResponseTeamDto team,
-        UrgenciaCallDto urgencia
+        UrgenciaCallDto urgencia,
+        LocalDateTime previsaoSolucao
 ) {
     public static ResponseCallDto fromCallEntity(CallsEntity call) {
 
@@ -32,7 +35,9 @@ public record ResponseCallDto(
                 userDto,
                 call.isStatus(),
                 teamDto,
-                call.getUrgencia()
+                call.getUrgencia(),
+                call.getPrevisaoSolucao()
+
         );
     }
 }

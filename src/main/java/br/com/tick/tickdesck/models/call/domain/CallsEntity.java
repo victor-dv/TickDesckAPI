@@ -49,7 +49,7 @@ public class CallsEntity {
     private UrgenciaCallDto urgencia = UrgenciaCallDto.BAIXA;
 
     @Column(name = "previsao_solucao")
-    private LocalDate previsaoSolucao;
+    private LocalDateTime previsaoSolucao;
 
     @CreationTimestamp
     @Column(name = "data_abertura", nullable = false, updatable = false)
