@@ -21,4 +21,7 @@ public interface CallRepository extends JpaRepository<CallsEntity, Long> {
     @Query("SELECT COALESCE(MAX(c.numberCall), 0) FROM CallsEntity c WHERE c.team.enterprise.id = :enterpriseId")
     Integer findLastNumeroByEmpresa(@Param("enterpriseId") Long enterpriseId);
 
+    List<CallsEntity> findByTitleContainingIgnoreCase(String title);
+
+    List<CallsEntity>findByNumberCall(Integer numberCall);
 }

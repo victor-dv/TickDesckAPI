@@ -163,5 +163,14 @@ public class CallService {
         }
     }
 
+     public List<CallsEntity> buscarPorTitulo(String title) {
+        return callRepository.findByTitleContainingIgnoreCase(title);
+    }
+
+    public List<CallsEntity> buscarPorNumero(Integer numberCall) {
+        return callRepository.findByNumberCall(numberCall);
+    }
+
+
 
 }
