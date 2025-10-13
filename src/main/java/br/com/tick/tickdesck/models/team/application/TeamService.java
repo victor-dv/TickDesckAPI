@@ -12,6 +12,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TeamService {
@@ -99,6 +100,11 @@ public class TeamService {
 
         // 2. Chamar o método customizado do UserRepository
         return userRepository.findByTeamEntityId(teamId);
+    }
+
+    public TeamEntity getTeamsId(Long teamId){
+        return teamRepository.findById(teamId)
+                .orElseThrow(() -> new RuntimeException("Equipe não encontrada com o ID: " + teamId));
     }
 
 
