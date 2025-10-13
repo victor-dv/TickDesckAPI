@@ -4,6 +4,7 @@ import br.com.tick.tickdesck.models.enterprise.application.EnterpriseService;
 import br.com.tick.tickdesck.models.enterprise.application.dto.CreateEnterpriseDto;
 import br.com.tick.tickdesck.models.enterprise.application.dto.ResponseEnterpriseDto;
 import br.com.tick.tickdesck.models.enterprise.application.dto.UpdateEnterpriseDto;
+import br.com.tick.tickdesck.models.team.application.dto.ResponseTeamDto;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -41,4 +42,12 @@ public class EnterpriseController {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
+    @GetMapping("/{id}/teams")
+    public ResponseEntity<?> getEnterpriseTeams(@PathVariable Long id) {
+        var result = this.enterpriseService.getTeamsByEnterpriseId(id)
+                .stream()
+                .map(ResponseTeamDto::fromTeamEntity)
+                .toList();
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
 }

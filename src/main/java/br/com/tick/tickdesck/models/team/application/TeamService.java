@@ -37,6 +37,11 @@ public class TeamService {
         var enterpise_id = enterpriseRepository.findById(createTeamDto.enterpriseId())
                 .orElseThrow(() -> new RuntimeException("Empresa não encontrada"));
 
+        boolean exists = teamRepository.existsByNameAndEnterpriseId(createTeamDto.name(), createTeamDto.enterpriseId());
+        if (exists) {
+            throw new RuntimeException("Já existe uma equipe com esse nome nessa empresa.");
+        }
+
         TeamEntity team = new TeamEntity();
         team.setName(createTeamDto.name());
         team.setEnterprise(enterpise_id);

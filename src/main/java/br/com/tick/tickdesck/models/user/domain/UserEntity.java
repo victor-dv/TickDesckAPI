@@ -24,7 +24,7 @@ public class UserEntity {
 
     @ManyToOne(fetch = FetchType.LAZY) // É bom usar LAZY aqui também
     @JoinColumn(name = "team_id", referencedColumnName = "id")
-    @JsonBackReference // O outro lado da referência JSON
+    @JsonBackReference
     private TeamEntity teamEntity;
 
     @Email(message = "O email deve ser válido")
