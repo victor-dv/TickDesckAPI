@@ -100,4 +100,10 @@ public class CallController {
         this.callService.deleteCall(id);
         return ResponseEntity.noContent().build();
     }
+
+    @PutMapping("/reopen/{id}")
+    public ResponseEntity<ResponseCallDto> reopenCall(@PathVariable Long id) {
+        var result = ResponseCallDto.fromCallEntity(this.callService.reOpenCall(id));
+        return ResponseEntity.ok(result);
+    }
 }

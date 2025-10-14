@@ -6,11 +6,13 @@ import br.com.tick.tickdesck.models.call.application.dto.UrgenciaCallDto;
 import br.com.tick.tickdesck.models.call.domain.CallsEntity;
 import br.com.tick.tickdesck.models.call.infra.CallRepository;
 import br.com.tick.tickdesck.models.team.infra.TeamRepository;
+import br.com.tick.tickdesck.models.user.application.dto.Role;
 import br.com.tick.tickdesck.models.user.infra.UserExternoRepository;
 import br.com.tick.tickdesck.models.user.infra.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -64,7 +66,6 @@ public class CallService {
 
         return callRepository.save(call);
     }
-
 
 
     // Busca um chamado pelo número, lança exceção se não encontrar
@@ -123,6 +124,32 @@ public class CallService {
         return callRepository.save(existingCall);
     }
 
+    // Reabre um chamado fechado
+    public CallsEntity reOpenCall(Long id) {
+
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
+        //Buscando o usuário autenticado no banco de dados
+        var loggedUser = userRepository.findById(Long.decode((String) authentication.getName()))
+                .orElseThrow(() -> new RuntimeException("Usuário autenticado não encontrado"));
+        //Verificando se o usuário tem papel ADMIN ou GERENTE
+        if (!loggedUser.getRole().equals(Role.ADMIN) && !loggedUser.getRole().equals(Role.GERENT) && !loggedUser.getRole().equals(Role.SUPORT)) {
+            throw new RuntimeException("Apenas usuários com papel ADMIN , GERENT e SUPORT podem reabrir um chamado");
+        }
+
+        CallsEntity existingCall = callRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Chamado não encontrado"));
+
+        if (existingCall.isStatus()) {
+            throw new IllegalArgumentException("O chamado já está aberto.");
+        }
+
+        existingCall.setStatus(true);
+        existingCall.setDataAbertura(LocalDateTime.now());
+        existingCall.setPrevisaoSolucao(calcularPrevisao(existingCall.getUrgencia()));
+
+        return callRepository.save(existingCall);
+    }
+
     public List<CallsEntity> callByTeam(Long idEquipe) {
 
         List<CallsEntity> calls = callRepository.findByTeamIdAndStatusTrue(idEquipe);
@@ -164,14 +191,13 @@ public class CallService {
         }
     }
 
-     public List<CallsEntity> buscarPorTitulo(String title) {
+    public List<CallsEntity> buscarPorTitulo(String title) {
         return callRepository.findByTitleContainingIgnoreCase(title);
     }
 
     public List<CallsEntity> buscarPorNumero(Integer numberCall) {
         return callRepository.findByNumberCall(numberCall);
     }
-
 
 
 }
