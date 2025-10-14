@@ -62,12 +62,13 @@ public class TeamService {
 
         var team = teamRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Equipe não encontrada"));
-
-        var enterpise_id = enterpriseRepository.findById(createTeamDto.enterpriseId())
-                .orElseThrow(() -> new RuntimeException("Empresa não encontrada"));
-
+        Long enterpriseId = team.getEnterprise().getId();
+        boolean exists = teamRepository.existsByNameAndEnterpriseId(createTeamDto.name(), enterpriseId);
+        if (exists && !team.getName().equals(createTeamDto.name())) {
+            throw new RuntimeException("Já existe uma equipe com esse nome nessa empresa.");
+        }
         team.setName(createTeamDto.name());
-        team.setEnterprise(enterpise_id);
+
 
         return teamRepository.save(team);
     }
@@ -102,7 +103,7 @@ public class TeamService {
         return userRepository.findByTeamEntityId(teamId);
     }
 
-    public TeamEntity getTeamsId(Long teamId){
+    public TeamEntity getTeamsId(Long teamId) {
         return teamRepository.findById(teamId)
                 .orElseThrow(() -> new RuntimeException("Equipe não encontrada com o ID: " + teamId));
     }
