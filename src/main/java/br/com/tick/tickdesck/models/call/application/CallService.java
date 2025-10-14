@@ -60,6 +60,7 @@ public class CallService {
         call.setStatus(createCallDto.status());
         call.setUrgencia(createCallDto.urgency());
         call.setPrevisaoSolucao(calcularPrevisao(createCallDto.urgency()));
+        call.setDataAbertura(createCallDto.dataAbertura());
 
         return callRepository.save(call);
     }

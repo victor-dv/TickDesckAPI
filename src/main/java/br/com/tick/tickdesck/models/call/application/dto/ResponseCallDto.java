@@ -16,7 +16,8 @@ public record ResponseCallDto(
         boolean status,
         ResponseTeamDto team,
         UrgenciaCallDto urgencia,
-        LocalDateTime previsaoSolucao
+        LocalDateTime previsaoSolucao,
+        LocalDateTime dataAbertura
 ) {
     public static ResponseCallDto fromCallEntity(CallsEntity call) {
 
@@ -36,8 +37,8 @@ public record ResponseCallDto(
                 call.isStatus(),
                 teamDto,
                 call.getUrgencia(),
-                call.getPrevisaoSolucao()
-
+                call.getPrevisaoSolucao(),
+                call.getDataAbertura()
         );
     }
 }
