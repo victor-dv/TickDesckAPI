@@ -12,8 +12,6 @@ public record UpdateUserDto(
         String username,
         @NotBlank(message = "O EMAIL é obrigatório")
         String email,
-        @NotBlank(message = "A PASSWORD é obrigatória")
-        String password,
         @NotNull(message = "A ROLE é obrigatória")
         Role role) {
 }

@@ -81,9 +81,7 @@ public class UserService {
         user.setUsername(updateUserDto.username() != null ? updateUserDto.username() : user.getUsername());
         user.setEmail(updateUserDto.email() != null ? updateUserDto.email() : user.getEmail());
         user.setRole(updateUserDto.role() != null ? updateUserDto.role() : user.getRole());
-        if (updateUserDto.password() != null) {
-            user.setPassword(passwordEncoder.encode(updateUserDto.password()));
-        }
+
         userRepository.findByEmailOrUsername(user.getEmail(), user.getUsername())
                 .ifPresent(existingUser -> {
                     if (!existingUser.getId().equals(user.getId())) {
