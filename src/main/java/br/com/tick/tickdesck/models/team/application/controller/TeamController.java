@@ -41,8 +41,14 @@ public class TeamController {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
+    @GetMapping("/get/{id}")
+    public ResponseEntity<?> getTeamId(@PathVariable Long id) {
+        var result = ResponseTeamDto.fromTeamEntity(this.teamService.getTeamsId(id));
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
+
     @GetMapping("/get-user/{id}")
-    public ResponseEntity<?> getTeamById(@PathVariable Long id) {
+    public ResponseEntity<?> getTeamMembersById(@PathVariable Long id) {
         var team = teamService.getTeamMembers(id)
                 .stream()
                 .map(ResponseUserDto::fromUser)

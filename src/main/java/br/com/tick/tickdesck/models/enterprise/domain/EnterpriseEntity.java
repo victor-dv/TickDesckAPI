@@ -1,8 +1,12 @@
 package br.com.tick.tickdesck.models.enterprise.domain;
 
+import br.com.tick.tickdesck.models.team.domain.TeamEntity;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import lombok.Data;
+
+import java.util.List;
 
 @Data
 @Entity
@@ -20,4 +24,8 @@ public class EnterpriseEntity {
     private String fantasyName;
     private String cnpj;
     private String phone;
+
+    @OneToMany(mappedBy = "enterprise", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
+    private List<TeamEntity> teams;
 }

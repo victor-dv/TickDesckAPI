@@ -4,6 +4,7 @@ import br.com.tick.tickdesck.models.enterprise.application.dto.CreateEnterpriseD
 import br.com.tick.tickdesck.models.enterprise.application.dto.UpdateEnterpriseDto;
 import br.com.tick.tickdesck.models.enterprise.domain.EnterpriseEntity;
 import br.com.tick.tickdesck.models.enterprise.infra.EnterpriseRepository;
+import br.com.tick.tickdesck.models.team.domain.TeamEntity;
 import br.com.tick.tickdesck.models.user.application.dto.Role;
 import br.com.tick.tickdesck.models.user.infra.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -99,6 +100,12 @@ public class EnterpriseService {
 
     public List<EnterpriseEntity> getAll() {
         return enterpriseRepository.findAll();
+    }
+
+    public List <TeamEntity> getTeamsByEnterpriseId(Long id){
+        var enterprise = enterpriseRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Empresa não encontrada"));
+        return enterprise.getTeams();
     }
 
 }

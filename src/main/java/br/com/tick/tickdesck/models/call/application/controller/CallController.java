@@ -4,6 +4,7 @@ import br.com.tick.tickdesck.models.call.application.CallService;
 import br.com.tick.tickdesck.models.call.application.dto.CreateCallDto;
 import br.com.tick.tickdesck.models.call.application.dto.ResponseCallDto;
 import br.com.tick.tickdesck.models.call.application.dto.UpdateCallDto;
+import br.com.tick.tickdesck.models.call.domain.CallsEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -72,9 +73,37 @@ public class CallController {
         return ResponseEntity.ok(result);
     }
 
+    @GetMapping("/search/")
+    public ResponseEntity<List<ResponseCallDto>> searchCalls(@RequestParam String query) {
+        List<ResponseCallDto> result;
+
+        try {
+            Integer numberCall = Integer.parseInt(query);
+            result = this.callService.buscarPorNumero(numberCall)
+                    .stream()
+                    .map(ResponseCallDto::fromCallEntity)
+                    .toList();
+        } catch (NumberFormatException e) {
+            // Se não for número, busca por título
+            result = this.callService.buscarPorTitulo(query)
+                    .stream()
+                    .map(ResponseCallDto::fromCallEntity)
+                    .toList();
+        }
+
+        return ResponseEntity.ok(result);
+    }
+
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         this.callService.deleteCall(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/reopen/{id}")
+    public ResponseEntity<ResponseCallDto> reopenCall(@PathVariable Long id) {
+        var result = ResponseCallDto.fromCallEntity(this.callService.reOpenCall(id));
+        return ResponseEntity.ok(result);
     }
 }

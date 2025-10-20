@@ -12,6 +12,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TeamService {
@@ -37,6 +38,11 @@ public class TeamService {
         var enterpise_id = enterpriseRepository.findById(createTeamDto.enterpriseId())
                 .orElseThrow(() -> new RuntimeException("Empresa não encontrada"));
 
+        boolean exists = teamRepository.existsByNameAndEnterpriseId(createTeamDto.name(), createTeamDto.enterpriseId());
+        if (exists) {
+            throw new RuntimeException("Já existe uma equipe com esse nome nessa empresa.");
+        }
+
         TeamEntity team = new TeamEntity();
         team.setName(createTeamDto.name());
         team.setEnterprise(enterpise_id);
@@ -56,12 +62,13 @@ public class TeamService {
 
         var team = teamRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Equipe não encontrada"));
-
-        var enterpise_id = enterpriseRepository.findById(createTeamDto.enterpriseId())
-                .orElseThrow(() -> new RuntimeException("Empresa não encontrada"));
-
+        Long enterpriseId = team.getEnterprise().getId();
+        boolean exists = teamRepository.existsByNameAndEnterpriseId(createTeamDto.name(), enterpriseId);
+        if (exists && !team.getName().equals(createTeamDto.name())) {
+            throw new RuntimeException("Já existe uma equipe com esse nome nessa empresa.");
+        }
         team.setName(createTeamDto.name());
-        team.setEnterprise(enterpise_id);
+
 
         return teamRepository.save(team);
     }
@@ -94,6 +101,11 @@ public class TeamService {
 
         // 2. Chamar o método customizado do UserRepository
         return userRepository.findByTeamEntityId(teamId);
+    }
+
+    public TeamEntity getTeamsId(Long teamId) {
+        return teamRepository.findById(teamId)
+                .orElseThrow(() -> new RuntimeException("Equipe não encontrada com o ID: " + teamId));
     }
 
 
