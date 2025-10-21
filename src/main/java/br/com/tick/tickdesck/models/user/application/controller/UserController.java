@@ -1,11 +1,9 @@
 package br.com.tick.tickdesck.models.user.application.controller;
 
+import br.com.tick.tickdesck.models.password.application.dto.UpdatePasswordDto;
 import br.com.tick.tickdesck.models.user.application.AuthUserService;
 import br.com.tick.tickdesck.models.user.application.UserService;
-import br.com.tick.tickdesck.models.user.application.dto.AuthUserRequestDto;
-import br.com.tick.tickdesck.models.user.application.dto.RegisterUserDto;
-import br.com.tick.tickdesck.models.user.application.dto.ResponseUserDto;
-import br.com.tick.tickdesck.models.user.application.dto.UpdateUserDto;
+import br.com.tick.tickdesck.models.user.application.dto.*;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -77,4 +75,9 @@ public class UserController {
     }
 
 
+    @PutMapping("/update-password/{id}")
+    public ResponseEntity<?> updatePassword(@PathVariable Long id, @Valid @RequestBody UpdatePasswordDto dto) {
+        this.userService.updatePassword(id, dto);
+        return ResponseEntity.status(HttpStatus.OK).body("Senha atualizada com sucesso!");
+    }
 }

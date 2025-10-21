@@ -36,4 +36,6 @@ public class UserEntity {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Role role = Role.ADMIN;
+
+    private boolean firstAccess = true;
 }

@@ -14,5 +14,6 @@ import lombok.NoArgsConstructor;
 public class AuthUserResponseDto {
     private String access_token;
     private Long expires_in;
+    private String message;
 
 }
