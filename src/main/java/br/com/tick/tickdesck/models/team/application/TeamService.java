@@ -99,7 +99,6 @@ public class TeamService {
             throw new RuntimeException("Equipe não encontrada com o ID: " + teamId);
         }
 
-        // 2. Chamar o método customizado do UserRepository
         return userRepository.findByTeamEntityId(teamId);
     }
 

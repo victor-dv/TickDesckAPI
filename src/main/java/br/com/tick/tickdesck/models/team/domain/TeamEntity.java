@@ -26,6 +26,6 @@ public class TeamEntity {
     private String name;
 
     @OneToMany(mappedBy = "teamEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonManagedReference // Ajuda a evitar recursão infinita ao converter para JSON
+    @JsonManagedReference
     private List<UserEntity> users = new ArrayList<>();
 }

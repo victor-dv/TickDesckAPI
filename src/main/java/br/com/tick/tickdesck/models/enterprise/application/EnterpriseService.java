@@ -6,6 +6,7 @@ import br.com.tick.tickdesck.models.enterprise.domain.EnterpriseEntity;
 import br.com.tick.tickdesck.models.enterprise.infra.EnterpriseRepository;
 import br.com.tick.tickdesck.models.team.domain.TeamEntity;
 import br.com.tick.tickdesck.models.user.application.dto.Role;
+import br.com.tick.tickdesck.models.user.domain.UserEntity;
 import br.com.tick.tickdesck.models.user.infra.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -106,6 +107,13 @@ public class EnterpriseService {
         var enterprise = enterpriseRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Empresa não encontrada"));
         return enterprise.getTeams();
+    }
+
+    public List<UserEntity> getUsersByEnterpriseId(Long id){
+            if (!enterpriseRepository.existsById(id)) {
+                throw new RuntimeException("Empresa não encontrada");
+            }
+            return userRepository.findByEnterpriseId(id);
     }
 
 }

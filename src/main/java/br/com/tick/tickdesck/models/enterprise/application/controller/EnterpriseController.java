@@ -5,6 +5,7 @@ import br.com.tick.tickdesck.models.enterprise.application.dto.CreateEnterpriseD
 import br.com.tick.tickdesck.models.enterprise.application.dto.ResponseEnterpriseDto;
 import br.com.tick.tickdesck.models.enterprise.application.dto.UpdateEnterpriseDto;
 import br.com.tick.tickdesck.models.team.application.dto.ResponseTeamDto;
+import br.com.tick.tickdesck.models.user.application.dto.ResponseUserDto;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -50,4 +51,13 @@ public class EnterpriseController {
                 .toList();
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
+    @GetMapping("/{id}/users")
+    public ResponseEntity<?> getEnterpriseUsers(@PathVariable Long id) {
+        var result = this.enterpriseService.getUsersByEnterpriseId(id)
+                .stream()
+                .map(ResponseUserDto::fromUser)
+                .toList();
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
+
 }
