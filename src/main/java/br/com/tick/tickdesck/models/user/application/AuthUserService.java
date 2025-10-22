@@ -7,11 +7,14 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.Map;
 
 @Service
 public class AuthUserService {
@@ -35,7 +38,7 @@ public class AuthUserService {
     * O token contém informações como o ID do usuário, nome, papel e email,
     * além de uma data de expiração definida para 80 minutos a partir do momento da
    autenticação. */
-    public AuthUserResponseDto execute(AuthUserRequestDto authUserRequestDto) {
+    public Object execute(AuthUserRequestDto authUserRequestDto) {
         var user = this.userRepository.findByEmail(authUserRequestDto.email())
                 .orElseThrow(() -> new RuntimeException("Email ou senha inválidos"));
         var passwordMatch = this.passwordEncoder
@@ -43,6 +46,8 @@ public class AuthUserService {
         if (!passwordMatch) {
             throw new RuntimeException("Email ou senha inválidos");
         }
+
+        String message = user.isFirstAccess() ? "Senha gerada, por favor altere sua senha." : "Login realizado com sucesso.";
 
         System.out.println(secretKey);
         // Cria o algoritmo de assinatura usando a chave secreta
@@ -64,6 +69,7 @@ public class AuthUserService {
         return AuthUserResponseDto.builder()
                 .access_token(token)
                 .expires_in(expireIn.toEpochMilli())
+                .message(message)
                 .build();
 
     }

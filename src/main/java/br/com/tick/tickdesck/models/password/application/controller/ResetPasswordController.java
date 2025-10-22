@@ -1,6 +1,6 @@
-package br.com.tick.tickdesck.models.reset_password.application.controller;
+package br.com.tick.tickdesck.models.password.application.controller;
 
-import br.com.tick.tickdesck.models.reset_password.application.ResetPasswordService;
+import br.com.tick.tickdesck.models.password.application.ResetPasswordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

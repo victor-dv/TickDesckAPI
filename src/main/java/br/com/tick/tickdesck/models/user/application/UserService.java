@@ -1,5 +1,8 @@
 package br.com.tick.tickdesck.models.user.application;
 
+import br.com.tick.tickdesck.models.emails.EmailService;
+import br.com.tick.tickdesck.models.password.application.GeneratedPasswordService;
+import br.com.tick.tickdesck.models.password.application.dto.UpdatePasswordDto;
 import br.com.tick.tickdesck.models.team.infra.TeamRepository;
 import br.com.tick.tickdesck.models.user.application.dto.RegisterUserDto;
 import br.com.tick.tickdesck.models.user.application.dto.Role;
@@ -25,6 +28,10 @@ public class UserService {
 
     @Autowired
     private TeamRepository teamRepository;
+
+    @Autowired
+    private EmailService emailService;
+
 
     /*Função para criar um usuário
     *Verifica se o usuário já existe pelo username ou email
@@ -55,8 +62,14 @@ public class UserService {
         userEntity.setName(registerUserDto.name());
         userEntity.setUsername(registerUserDto.username());
         userEntity.setEmail(registerUserDto.email());
-        userEntity.setPassword(passwordEncoder.encode(registerUserDto.password()));
         userEntity.setRole(registerUserDto.role() != null ? registerUserDto.role() : Role.CLIENT);
+
+        // 🔹 Gerar senha temporária e criptografar
+        String tempPassword = GeneratedPasswordService.generateRandomPassword(10);
+        userEntity.setPassword(passwordEncoder.encode(tempPassword));
+
+        // 🔹 Marcar como primeiro acesso
+        userEntity.setFirstAccess(true);
 
         // Buscando e atribuindo o time
         var team = teamRepository.findById(registerUserDto.teamId())
@@ -64,9 +77,26 @@ public class UserService {
         userEntity.setTeamEntity(team);
 
         // Salvando o usuário no repositório
-        return userRepository.save(userEntity);
-    }
+        var savedUser = userRepository.save(userEntity);
 
+        // 🔹 Enviar e-mail com a senha
+        emailService.send(
+                savedUser.getEmail(),
+                "Acesso ao Sistema de Chamados",
+                """
+                Olá, %s!
+        
+                Sua conta foi criada com sucesso.
+        
+                Login: %s
+                Senha temporária: %s
+        
+                Por favor, altere sua senha no primeiro acesso.
+                """.formatted(savedUser.getName(), savedUser.getUsername(), tempPassword)
+        );
+
+        return savedUser;
+    }
 
     /*Função para atualizar as informações do usuario
      * Pegamos o user através do id
@@ -124,6 +154,20 @@ public class UserService {
     public UserEntity getById(Long id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+    }
+
+    public void updatePassword(Long id, UpdatePasswordDto dto) {
+        var user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
+        if (!passwordEncoder.matches(dto.oldPassword(), user.getPassword())) {
+            throw new RuntimeException("Senha antiga incorreta");
+        }
+
+        user.setPassword(passwordEncoder.encode(dto.newPassword()));
+        user.setFirstAccess(false);
+
+        userRepository.save(user);
     }
 
 }

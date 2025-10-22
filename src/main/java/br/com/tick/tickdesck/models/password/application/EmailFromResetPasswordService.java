@@ -1,4 +1,4 @@
-package br.com.tick.tickdesck.models.reset_password.application;
+package br.com.tick.tickdesck.models.password.application;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;

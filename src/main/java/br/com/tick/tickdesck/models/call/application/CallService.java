@@ -86,10 +86,7 @@ public class CallService {
         }
         return calls;
     }
-
-
-    // Atualiza os dados de um chamado existente
-    public CallsEntity updateCall(Long id, UpdateCallDto updatedCallDto) {
+     public CallsEntity updateCall(Long id, UpdateCallDto updatedCallDto) {
         CallsEntity existingCall = callRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Chamado não encontrado"));
 
