@@ -41,7 +41,7 @@ public class CallsEntity {
     private boolean status = true;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = true)
     private UserEntity userResponsavel;
 
     @Column(nullable = false)
