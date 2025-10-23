@@ -1,5 +1,6 @@
 package br.com.tick.tickdesck.models.auditoria_call.domain;
 
+import br.com.tick.tickdesck.models.auditoria_call.application.dto.RoleStatusAction;
 import br.com.tick.tickdesck.models.call.domain.CallsEntity;
 import br.com.tick.tickdesck.models.files.domain.FileEntity;
 import br.com.tick.tickdesck.models.user.domain.UserEntity;
@@ -28,6 +29,10 @@ public class ActionEntity {
 
     @Column(nullable = false)
     private String description;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status_action", nullable = false)
+    private RoleStatusAction statusAction = RoleStatusAction.PUBLIC;
 
     @CreationTimestamp
     @Column(name = "data", nullable = false, updatable = false)

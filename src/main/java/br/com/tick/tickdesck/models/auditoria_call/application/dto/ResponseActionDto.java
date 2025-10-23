@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 public record  ResponseActionDto(
         Long id,
         String description,
+        RoleStatusAction statusAction,
         LocalDateTime data,
         UserInfo user,
         CallInfo call
@@ -16,6 +17,7 @@ public record  ResponseActionDto(
         return new ResponseActionDto(
                 entity.getId(),
                 entity.getDescription(),
+                entity.getStatusAction(),
                 entity.getData(),
                 new UserInfo(
                         entity.getUser().getId(),
