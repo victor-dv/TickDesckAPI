@@ -62,6 +62,11 @@ public class CallService {
         call.setStatus(createCallDto.status());
         call.setUrgencia(createCallDto.urgency());
         call.setPrevisaoSolucao(calcularPrevisao(createCallDto.urgency()));
+        if (createCallDto.previsaoSolucao() != null) {
+            call.setPrevisaoSolucao(createCallDto.previsaoSolucao());
+        } else {
+            call.setPrevisaoSolucao(calcularPrevisao(createCallDto.urgency()));
+        }
         call.setDataAbertura(createCallDto.dataAbertura());
 
         return callRepository.save(call);

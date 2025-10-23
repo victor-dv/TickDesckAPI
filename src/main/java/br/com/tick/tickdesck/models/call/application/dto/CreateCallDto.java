@@ -10,7 +10,8 @@ public record  CreateCallDto (
         boolean status,
         Long teamId,
         UrgenciaCallDto urgency,
-        LocalDateTime dataAbertura
+        LocalDateTime dataAbertura,
+        LocalDateTime previsaoSolucao
 
 ) {
 }
