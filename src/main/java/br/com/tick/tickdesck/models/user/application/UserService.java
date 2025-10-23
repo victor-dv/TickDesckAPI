@@ -112,7 +112,7 @@ public class UserService {
         user.setEmail(updateUserDto.email() != null ? updateUserDto.email() : user.getEmail());
         user.setRole(updateUserDto.role() != null ? updateUserDto.role() : user.getRole());
 
-        var team = teamRepository.findById(updateUserDto.teamEntity().getId())
+        var team = teamRepository.findById(updateUserDto.teamEntity().longValue())
                 .orElseThrow(() -> new RuntimeException("Time não encontrado"));
         user.setTeamEntity(team);
 

@@ -15,6 +15,7 @@ public record UpdateUserDto(
         String email,
         @NotNull(message = "A ROLE é obrigatória")
         Role role,
-        TeamEntity teamEntity
+
+        Integer teamEntity
         ) {
 }
