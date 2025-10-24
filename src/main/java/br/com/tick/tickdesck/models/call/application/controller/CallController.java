@@ -73,7 +73,7 @@ public class CallController {
         return ResponseEntity.ok(result);
     }
 
-    @GetMapping("/search/")
+    @GetMapping("/search")
     public ResponseEntity<List<ResponseCallDto>> searchCalls(@RequestParam String query) {
         List<ResponseCallDto> result;
 

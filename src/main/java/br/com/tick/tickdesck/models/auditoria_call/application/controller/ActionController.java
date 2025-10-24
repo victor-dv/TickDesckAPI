@@ -3,6 +3,7 @@ package br.com.tick.tickdesck.models.auditoria_call.application.controller;
 import br.com.tick.tickdesck.models.auditoria_call.application.ActionService;
 import br.com.tick.tickdesck.models.auditoria_call.application.dto.CreateActionDto;
 import br.com.tick.tickdesck.models.auditoria_call.application.dto.ResponseActionDto;
+import br.com.tick.tickdesck.models.auditoria_call.application.dto.RoleStatusAction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -45,6 +46,15 @@ public class ActionController {
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<ResponseActionDto>> listByUser(@PathVariable Long userId) {
         var result = this.actionService.listActionsByUser(userId)
+                .stream()
+                .map(ResponseActionDto::fromEntity)
+                .toList();
+        return ResponseEntity.ok(result);
+    }
+
+    @GetMapping("/status/{statusAction}")
+    public ResponseEntity<List<ResponseActionDto>> listByStatus(@PathVariable RoleStatusAction statusAction) {
+        var result = this.actionService.getStatusActions(statusAction)
                 .stream()
                 .map(ResponseActionDto::fromEntity)
                 .toList();

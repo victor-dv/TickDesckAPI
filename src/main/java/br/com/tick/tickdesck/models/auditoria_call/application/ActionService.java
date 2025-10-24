@@ -39,7 +39,7 @@
             action.setDescription(createActionDto.description());
             action.setUser(loggedUser);
             action.setCallsEntity(call);
-            action.setStatusAction(createActionDto.statusAction() != null ? createActionDto.statusAction() : RoleStatusAction.PUBLIC);
+            action.setStatusAction(createActionDto.statusAction());
 
             return actionRepository.save(action);
         }
@@ -67,6 +67,10 @@
             var action = actionRepository.findById(id)
                     .orElseThrow(() -> new IllegalArgumentException("Action não encontrada"));
             actionRepository.delete(action);
+        }
+
+        public List<ActionEntity> getStatusActions(RoleStatusAction statusAction) {
+            return actionRepository.findByStatusAction(statusAction);
         }
     }
 
