@@ -7,6 +7,7 @@ import br.com.tick.tickdesck.models.call.domain.CallsEntity;
 import br.com.tick.tickdesck.models.call.infra.CallRepository;
 import br.com.tick.tickdesck.models.team.infra.TeamRepository;
 import br.com.tick.tickdesck.models.user.application.dto.Role;
+import br.com.tick.tickdesck.models.user.domain.UserEntity;
 import br.com.tick.tickdesck.models.user.infra.UserExternoRepository;
 import br.com.tick.tickdesck.models.user.infra.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,8 +42,6 @@ public class CallService {
 /*        var userExterno = userExternoRepository.findById(createCallDto.userExterId())
                 .orElseThrow(() -> new IllegalArgumentException("Usuário externo não encontrado"));*/
 
-        var userResponsavel = userRepository.findById(createCallDto.userResponsavelId())
-                .orElseThrow(() -> new IllegalArgumentException("Usuário responsável não encontrado"));
 
         var team = teamRepository.findById(createCallDto.teamId())
                 .orElseThrow(() -> new IllegalArgumentException("Equipe não encontrada"));
@@ -57,11 +56,21 @@ public class CallService {
         call.setNumberCall(novoNumero);
         call.setTitle(createCallDto.title());
         call.setUserExterno(userExterno);
+        UserEntity userResponsavel = null;
+        if (createCallDto.userResponsavelId() != null) {
+            userResponsavel = userRepository.findById(createCallDto.userResponsavelId())
+                    .orElseThrow(() -> new IllegalArgumentException("Usuário responsável não encontrado"));
+        }
         call.setUserResponsavel(userResponsavel);
         call.setTeam(team);
         call.setStatus(createCallDto.status());
         call.setUrgencia(createCallDto.urgency());
         call.setPrevisaoSolucao(calcularPrevisao(createCallDto.urgency()));
+        if (createCallDto.previsaoSolucao() != null) {
+            call.setPrevisaoSolucao(createCallDto.previsaoSolucao());
+        } else {
+            call.setPrevisaoSolucao(calcularPrevisao(createCallDto.urgency()));
+        }
         call.setDataAbertura(createCallDto.dataAbertura());
 
         return callRepository.save(call);

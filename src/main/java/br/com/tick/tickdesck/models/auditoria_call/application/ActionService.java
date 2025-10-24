@@ -1,6 +1,7 @@
     package br.com.tick.tickdesck.models.auditoria_call.application;
 
     import br.com.tick.tickdesck.models.auditoria_call.application.dto.CreateActionDto;
+    import br.com.tick.tickdesck.models.auditoria_call.application.dto.RoleStatusAction;
     import br.com.tick.tickdesck.models.auditoria_call.domain.ActionEntity;
     import br.com.tick.tickdesck.models.auditoria_call.repository.ActionRepository;
     import br.com.tick.tickdesck.models.call.infra.CallRepository;
@@ -38,6 +39,7 @@
             action.setDescription(createActionDto.description());
             action.setUser(loggedUser);
             action.setCallsEntity(call);
+            action.setStatusAction(createActionDto.statusAction());
 
             return actionRepository.save(action);
         }
@@ -65,6 +67,10 @@
             var action = actionRepository.findById(id)
                     .orElseThrow(() -> new IllegalArgumentException("Action não encontrada"));
             actionRepository.delete(action);
+        }
+
+        public List<ActionEntity> getStatusActions(RoleStatusAction statusAction) {
+            return actionRepository.findByStatusAction(statusAction);
         }
     }
 
