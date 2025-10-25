@@ -17,5 +17,5 @@ public record UpdateUserDto(
         Role role,
 
         Integer teamId
-        ) {
+) {
 }
