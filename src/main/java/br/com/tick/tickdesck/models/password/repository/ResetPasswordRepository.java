@@ -1,7 +1,7 @@
 package br.com.tick.tickdesck.models.password.repository;
 
 import br.com.tick.tickdesck.models.password.domain.ResetPasswordEntity;
-import br.com.tick.tickdesck.models.user.domain.UserEntity;
+import br.com.tick.tickdesck.models.user_interno.domain.UserEntity;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;

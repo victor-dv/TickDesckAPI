@@ -1,9 +1,9 @@
-package br.com.tick.tickdesck.models.user.application.controller;
+package br.com.tick.tickdesck.models.user_interno.application.controller;
 
 import br.com.tick.tickdesck.models.password.application.dto.UpdatePasswordDto;
-import br.com.tick.tickdesck.models.user.application.AuthUserService;
-import br.com.tick.tickdesck.models.user.application.UserService;
-import br.com.tick.tickdesck.models.user.application.dto.*;
+import br.com.tick.tickdesck.models.user_interno.application.AuthUserService;
+import br.com.tick.tickdesck.models.user_interno.application.UserService;
+import br.com.tick.tickdesck.models.user_interno.application.dto.*;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

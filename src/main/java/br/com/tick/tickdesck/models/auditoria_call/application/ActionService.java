@@ -5,7 +5,7 @@
     import br.com.tick.tickdesck.models.auditoria_call.domain.ActionEntity;
     import br.com.tick.tickdesck.models.auditoria_call.repository.ActionRepository;
     import br.com.tick.tickdesck.models.call.infra.CallRepository;
-    import br.com.tick.tickdesck.models.user.infra.UserRepository;
+    import br.com.tick.tickdesck.models.user_interno.infra.UserRepository;
     import org.springframework.beans.factory.annotation.Autowired;
     import org.springframework.security.core.context.SecurityContextHolder;
     import org.springframework.stereotype.Service;

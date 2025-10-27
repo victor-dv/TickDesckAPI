@@ -2,8 +2,8 @@ package br.com.tick.tickdesck.models.password.application;
 
 import br.com.tick.tickdesck.models.password.domain.ResetPasswordEntity;
 import br.com.tick.tickdesck.models.password.repository.ResetPasswordRepository;
-import br.com.tick.tickdesck.models.user.domain.UserEntity;
-import br.com.tick.tickdesck.models.user.infra.UserRepository;
+import br.com.tick.tickdesck.models.user_interno.domain.UserEntity;
+import br.com.tick.tickdesck.models.user_interno.infra.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

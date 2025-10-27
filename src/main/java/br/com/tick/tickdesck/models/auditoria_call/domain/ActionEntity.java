@@ -3,7 +3,7 @@ package br.com.tick.tickdesck.models.auditoria_call.domain;
 import br.com.tick.tickdesck.models.auditoria_call.application.dto.RoleStatusAction;
 import br.com.tick.tickdesck.models.call.domain.CallsEntity;
 import br.com.tick.tickdesck.models.files.domain.FileEntity;
-import br.com.tick.tickdesck.models.user.domain.UserEntity;
+import br.com.tick.tickdesck.models.user_interno.domain.UserEntity;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;

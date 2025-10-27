@@ -1,6 +1,6 @@
-package br.com.tick.tickdesck.models.user.infra;
+package br.com.tick.tickdesck.models.user_interno.infra;
 
-import br.com.tick.tickdesck.models.user.domain.UserEntity;
+import br.com.tick.tickdesck.models.user_interno.domain.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

@@ -5,7 +5,7 @@ import br.com.tick.tickdesck.models.enterprise.application.dto.CreateEnterpriseD
 import br.com.tick.tickdesck.models.enterprise.application.dto.ResponseEnterpriseDto;
 import br.com.tick.tickdesck.models.enterprise.application.dto.UpdateEnterpriseDto;
 import br.com.tick.tickdesck.models.team.application.dto.ResponseTeamDto;
-import br.com.tick.tickdesck.models.user.application.dto.ResponseUserDto;
+import br.com.tick.tickdesck.models.user_interno.application.dto.ResponseUserDto;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

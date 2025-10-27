@@ -6,21 +6,16 @@ import br.com.tick.tickdesck.models.call.application.dto.UrgenciaCallDto;
 import br.com.tick.tickdesck.models.call.domain.CallsEntity;
 import br.com.tick.tickdesck.models.call.infra.CallRepository;
 import br.com.tick.tickdesck.models.team.infra.TeamRepository;
-import br.com.tick.tickdesck.models.user.application.dto.Role;
-import br.com.tick.tickdesck.models.user.domain.UserEntity;
-import br.com.tick.tickdesck.models.user.infra.UserExternoRepository;
-import br.com.tick.tickdesck.models.user.infra.UserRepository;
+import br.com.tick.tickdesck.models.user_interno.application.dto.Role;
+import br.com.tick.tickdesck.models.user_interno.domain.UserEntity;
+import br.com.tick.tickdesck.models.user_externo.infra.UserExternoRepository;
+import br.com.tick.tickdesck.models.user_interno.infra.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
 
 @Service
 public class CallService {

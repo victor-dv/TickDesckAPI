@@ -1,14 +1,14 @@
-package br.com.tick.tickdesck.models.user.application;
+package br.com.tick.tickdesck.models.user_interno.application;
 
 import br.com.tick.tickdesck.models.emails.EmailService;
 import br.com.tick.tickdesck.models.password.application.GeneratedPasswordService;
 import br.com.tick.tickdesck.models.password.application.dto.UpdatePasswordDto;
 import br.com.tick.tickdesck.models.team.infra.TeamRepository;
-import br.com.tick.tickdesck.models.user.application.dto.RegisterUserDto;
-import br.com.tick.tickdesck.models.user.application.dto.Role;
-import br.com.tick.tickdesck.models.user.application.dto.UpdateUserDto;
-import br.com.tick.tickdesck.models.user.domain.UserEntity;
-import br.com.tick.tickdesck.models.user.infra.UserRepository;
+import br.com.tick.tickdesck.models.user_interno.application.dto.RegisterUserDto;
+import br.com.tick.tickdesck.models.user_interno.application.dto.Role;
+import br.com.tick.tickdesck.models.user_interno.application.dto.UpdateUserDto;
+import br.com.tick.tickdesck.models.user_interno.domain.UserEntity;
+import br.com.tick.tickdesck.models.user_interno.infra.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
