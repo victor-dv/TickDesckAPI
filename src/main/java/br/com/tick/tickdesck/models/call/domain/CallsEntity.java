@@ -1,9 +1,10 @@
 package br.com.tick.tickdesck.models.call.domain;
 
 import br.com.tick.tickdesck.models.call.application.dto.UrgenciaCallDto;
+import br.com.tick.tickdesck.models.requisitantes.domain.RequisitanteEntity;
 import br.com.tick.tickdesck.models.team.domain.TeamEntity;
-import br.com.tick.tickdesck.models.user.domain.UserEntity;
-import br.com.tick.tickdesck.models.user.domain.UserExternoEntity;
+import br.com.tick.tickdesck.models.user_interno.domain.UserEntity;
+import br.com.tick.tickdesck.models.user_externo.domain.UserExternoEntity;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
@@ -24,11 +25,9 @@ public class CallsEntity {
 
     private String title;
 
-    //Classe para referencia ao usuario que vem do email
-    //Obtemos apenas os valores de email e username
-    @ManyToOne
-    @JoinColumn(name = "userExterno_id", referencedColumnName = "id", nullable = false)
-    private UserExternoEntity userExterno;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "requisitante_id", referencedColumnName = "id")
+    private RequisitanteEntity requisitante;
 
     @ManyToOne
     @JoinColumn(name = "team_id", referencedColumnName = "id", nullable = false)

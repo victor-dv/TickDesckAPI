@@ -1,6 +1,5 @@
-package br.com.tick.tickdesck.models.user.application.dto;
+package br.com.tick.tickdesck.models.user_interno.application.dto;
 
-import br.com.tick.tickdesck.models.team.domain.TeamEntity;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;

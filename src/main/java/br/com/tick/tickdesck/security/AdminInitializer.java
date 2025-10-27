@@ -1,8 +1,8 @@
 package br.com.tick.tickdesck.security;
 
-import br.com.tick.tickdesck.models.user.application.dto.Role;
-import br.com.tick.tickdesck.models.user.domain.UserEntity;
-import br.com.tick.tickdesck.models.user.infra.UserRepository;
+import br.com.tick.tickdesck.models.user_interno.application.dto.Role;
+import br.com.tick.tickdesck.models.user_interno.domain.UserEntity;
+import br.com.tick.tickdesck.models.user_interno.infra.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;

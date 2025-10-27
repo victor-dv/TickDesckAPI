@@ -1,6 +1,6 @@
 package br.com.tick.tickdesck.models.password.domain;
 
-import br.com.tick.tickdesck.models.user.domain.UserEntity;
+import br.com.tick.tickdesck.models.user_interno.domain.UserEntity;
 import jakarta.persistence.*;
 import lombok.Data;
 

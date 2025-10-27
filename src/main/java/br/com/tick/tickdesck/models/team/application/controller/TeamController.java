@@ -3,7 +3,7 @@ package br.com.tick.tickdesck.models.team.application.controller;
 import br.com.tick.tickdesck.models.team.application.TeamService;
 import br.com.tick.tickdesck.models.team.application.dto.CreateTeamDto;
 import br.com.tick.tickdesck.models.team.application.dto.ResponseTeamDto;
-import br.com.tick.tickdesck.models.user.application.dto.ResponseUserDto;
+import br.com.tick.tickdesck.models.user_interno.application.dto.ResponseUserDto;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

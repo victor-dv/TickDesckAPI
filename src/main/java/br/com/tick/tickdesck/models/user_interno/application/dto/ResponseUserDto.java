@@ -1,7 +1,7 @@
-package br.com.tick.tickdesck.models.user.application.dto;
+package br.com.tick.tickdesck.models.user_interno.application.dto;
 
 import br.com.tick.tickdesck.models.team.application.dto.ResponseTeamDto;
-import br.com.tick.tickdesck.models.user.domain.UserEntity;
+import br.com.tick.tickdesck.models.user_interno.domain.UserEntity;
 
 public record ResponseUserDto(
         Long id,

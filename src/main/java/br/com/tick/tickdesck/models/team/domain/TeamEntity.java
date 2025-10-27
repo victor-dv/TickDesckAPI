@@ -1,11 +1,10 @@
 package br.com.tick.tickdesck.models.team.domain;
 
 import br.com.tick.tickdesck.models.enterprise.domain.EnterpriseEntity;
-import br.com.tick.tickdesck.models.user.domain.UserEntity;
+import br.com.tick.tickdesck.models.user_interno.domain.UserEntity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 import java.util.ArrayList;

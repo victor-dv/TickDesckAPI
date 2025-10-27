@@ -1,4 +1,4 @@
-package br.com.tick.tickdesck.models.user.application.dto;
+package br.com.tick.tickdesck.models.user_interno.application.dto;
 
 import jakarta.validation.constraints.NotBlank;
 
