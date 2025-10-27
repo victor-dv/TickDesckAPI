@@ -18,10 +18,10 @@ public abstract class RequisitanteEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false) // Boa prática
+    @Column(nullable = false)
     private String name;
 
     @Email(message = "O email deve ser válido")
-    @Column(nullable = false) // Boa prática
+    @Column(nullable = false)
     private String email;
 }
