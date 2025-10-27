@@ -6,8 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Getter // SUBSTITUA
-@Setter // SUBSTITUA
+@Getter
+@Setter
 @NoArgsConstructor
 @Entity
 @Table(name = "requisitantes")

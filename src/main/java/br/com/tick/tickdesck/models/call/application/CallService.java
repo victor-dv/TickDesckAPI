@@ -5,6 +5,7 @@ import br.com.tick.tickdesck.models.call.application.dto.UpdateCallDto;
 import br.com.tick.tickdesck.models.call.application.dto.UrgenciaCallDto;
 import br.com.tick.tickdesck.models.call.domain.CallsEntity;
 import br.com.tick.tickdesck.models.call.infra.CallRepository;
+import br.com.tick.tickdesck.models.requisitantes.repository.RequisitanteRepository;
 import br.com.tick.tickdesck.models.team.infra.TeamRepository;
 import br.com.tick.tickdesck.models.user_interno.application.dto.Role;
 import br.com.tick.tickdesck.models.user_interno.domain.UserEntity;
@@ -27,22 +28,21 @@ public class CallService {
     private UserRepository userRepository;
 
     @Autowired
-    private UserExternoRepository userExternoRepository;
+    private RequisitanteRepository requisitanteRepository;
 
     @Autowired
     private TeamRepository teamRepository;
 
     // Cria um novo chamado a partir dos dados recebidos
     public CallsEntity createCall(CreateCallDto createCallDto) {
-/*        var userExterno = userExternoRepository.findById(createCallDto.userExterId())
-                .orElseThrow(() -> new IllegalArgumentException("Usuário externo não encontrado"));*/
-
 
         var team = teamRepository.findById(createCallDto.teamId())
                 .orElseThrow(() -> new IllegalArgumentException("Equipe não encontrada"));
 
-        var userExterno = userExternoRepository.findById(createCallDto.userExternoId())
-                .orElseThrow(() -> new IllegalArgumentException("Usuário externo não encontrado"));
+
+        var requisitante = requisitanteRepository.findById(createCallDto.requisitanteId())
+                .orElseThrow(() -> new IllegalArgumentException("Requisitante não encontrado"));
+
 
         Integer ultimoNumero = callRepository.findLastNumeroByEmpresa(team.getEnterprise().getId());
         int novoNumero = ultimoNumero + 1;
@@ -50,7 +50,9 @@ public class CallService {
         CallsEntity call = new CallsEntity();
         call.setNumberCall(novoNumero);
         call.setTitle(createCallDto.title());
-        call.setUserExterno(userExterno);
+
+        call.setRequisitante(requisitante);
+
         UserEntity userResponsavel = null;
         if (createCallDto.userResponsavelId() != null) {
             userResponsavel = userRepository.findById(createCallDto.userResponsavelId())
@@ -58,6 +60,16 @@ public class CallService {
         }
         call.setUserResponsavel(userResponsavel);
         call.setTeam(team);
+
+        if (userResponsavel.getTeamEntity() == null) {
+            throw new IllegalArgumentException("O usuário responsável '" + userResponsavel.getName() + "' não está associado a nenhuma equipe.");
+        }
+        if (!userResponsavel.getTeamEntity().getId().equals(team.getId())) {
+            throw new IllegalArgumentException("O usuário responsável '" + userResponsavel.getName() +
+                    "' pertence à equipe '" + userResponsavel.getTeamEntity().getName() +
+                    "', mas o chamado está sendo atribuído à equipe '" + team.getName() + "'.");
+        }
+
         call.setStatus(createCallDto.status());
         call.setUrgencia(createCallDto.urgency());
         call.setPrevisaoSolucao(calcularPrevisao(createCallDto.urgency()));
@@ -90,7 +102,8 @@ public class CallService {
         }
         return calls;
     }
-     public CallsEntity updateCall(Long id, UpdateCallDto updatedCallDto) {
+
+    public CallsEntity updateCall(Long id, UpdateCallDto updatedCallDto) {
         CallsEntity existingCall = callRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Chamado não encontrado"));
 

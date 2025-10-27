@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 public record  CreateCallDto (
         Integer numberCall,
         String title,
-        Long userExternoId,
+        Long requisitanteId,
         Long userResponsavelId,
         boolean status,
         Long teamId,
