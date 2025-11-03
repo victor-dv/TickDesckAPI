@@ -14,7 +14,7 @@ public record ResponseCallDto(
         ResponseUserDto userResponsavel,
         boolean status,
         ResponseTeamDto team,
-        UrgenciaCallDto urgencia,
+        UrgenciaCallDto urgency,
         LocalDateTime previsaoSolucao,
         LocalDateTime dataAbertura
 ) {
