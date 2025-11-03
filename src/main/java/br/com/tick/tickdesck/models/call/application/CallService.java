@@ -6,6 +6,7 @@ import br.com.tick.tickdesck.models.call.application.dto.UrgenciaCallDto;
 import br.com.tick.tickdesck.models.call.domain.CallsEntity;
 import br.com.tick.tickdesck.models.call.infra.CallRepository;
 import br.com.tick.tickdesck.models.requisitantes.repository.RequisitanteRepository;
+import br.com.tick.tickdesck.models.team.domain.TeamEntity;
 import br.com.tick.tickdesck.models.team.infra.TeamRepository;
 import br.com.tick.tickdesck.models.user_interno.application.dto.Role;
 import br.com.tick.tickdesck.models.user_interno.domain.UserEntity;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CallService {
@@ -118,13 +120,21 @@ public class CallService {
         if (updatedCallDto.urgency() != null) {
             existingCall.setUrgencia(updatedCallDto.urgency());
         }
+        if(updatedCallDto.previsaoSolucao() != null) {
+            existingCall.setPrevisaoSolucao(updatedCallDto.previsaoSolucao());
+        }
+        if(updatedCallDto.teamId() != null && updatedCallDto.teamId() > 0) {
+            TeamEntity team = teamRepository.findById(updatedCallDto.teamId())
+                    .orElseThrow(() -> new IllegalArgumentException("Time não encontrado"));
 
-      /*  if (updatedCallDto.usuarioFechamento() != null) {
-            existingCall.setUserResponsavel(updatedCallDto.usuarioFechamento());
-        }*/
-/*
-        existingCall.setDataFechamento(updatedCallDto.dataFechamento());
-*/
+            existingCall.setTeam(team);
+        }
+        if(updatedCallDto.userResponsavelId() != null && updatedCallDto.userResponsavelId() > 0) {
+            UserEntity user = userRepository.findById(updatedCallDto.userResponsavelId())
+                    .orElseThrow(() -> new IllegalArgumentException("Usuário responsável não encontrado!"));
+
+            existingCall.setUserResponsavel(user);
+        }
 
         return callRepository.save(existingCall);
     }
