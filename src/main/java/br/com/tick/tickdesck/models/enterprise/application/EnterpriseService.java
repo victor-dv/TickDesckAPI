@@ -1,6 +1,7 @@
 package br.com.tick.tickdesck.models.enterprise.application;
 
 import br.com.tick.tickdesck.models.enterprise.application.dto.CreateEnterpriseDto;
+import br.com.tick.tickdesck.models.enterprise.application.dto.ResponseEnterpriseDto;
 import br.com.tick.tickdesck.models.enterprise.application.dto.UpdateEnterpriseDto;
 import br.com.tick.tickdesck.models.enterprise.domain.EnterpriseEntity;
 import br.com.tick.tickdesck.models.enterprise.infra.EnterpriseRepository;
@@ -13,6 +14,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class EnterpriseService {
@@ -99,10 +101,15 @@ public class EnterpriseService {
         return enterprise;
     }
 
+
     public List<EnterpriseEntity> getAll() {
         return enterpriseRepository.findAll();
     }
 
+    public EnterpriseEntity getEnterpriseById(Long id) {
+        return enterpriseRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Empresa não encontrada!"));
+    }
     public List <TeamEntity> getTeamsByEnterpriseId(Long id){
         var enterprise = enterpriseRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Empresa não encontrada"));

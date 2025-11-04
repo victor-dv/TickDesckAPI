@@ -140,7 +140,14 @@ public class CallService {
         CallsEntity existingCall = callRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Chamado não encontrado"));
 
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        var loggedUser = userRepository.findById(Long.decode((String) authentication.getName()))
+                .orElseThrow(() -> new IllegalArgumentException("Usuário autenticado não encontrado"));
+
         existingCall.setStatus(false); // Fecha o chamado
+        existingCall.setUserFechamento(loggedUser); // Define o usuário de fechamento
+        existingCall.setDataHoraFechamento(LocalDateTime.now());
         return callRepository.save(existingCall);
     }
 
@@ -166,6 +173,10 @@ public class CallService {
         existingCall.setStatus(true);
         existingCall.setDataAbertura(LocalDateTime.now());
         existingCall.setPrevisaoSolucao(calcularPrevisao(existingCall.getUrgencia()));
+
+        // Ao reabrir um chamado eu anulo os valores de fechamento pra resetar
+        existingCall.setDataHoraFechamento(null);
+        existingCall.setUserFechamento(null);
 
         return callRepository.save(existingCall);
     }

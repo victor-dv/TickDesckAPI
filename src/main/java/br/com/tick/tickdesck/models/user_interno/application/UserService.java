@@ -1,6 +1,6 @@
 package br.com.tick.tickdesck.models.user_interno.application;
 
-import br.com.tick.tickdesck.models.emails.EmailService;
+import br.com.tick.tickdesck.config.EmailService;
 import br.com.tick.tickdesck.models.password.application.GeneratedPasswordService;
 import br.com.tick.tickdesck.models.password.application.dto.UpdatePasswordDto;
 import br.com.tick.tickdesck.models.team.infra.TeamRepository;

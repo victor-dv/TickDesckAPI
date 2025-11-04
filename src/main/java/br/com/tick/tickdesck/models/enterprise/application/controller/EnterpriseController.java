@@ -43,6 +43,12 @@ public class EnterpriseController {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getEnterpriseById(@PathVariable Long id) {
+        var result = ResponseEnterpriseDto.fromEnterpriseEntity(this.enterpriseService.getEnterpriseById(id));
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
+
     @GetMapping("/{id}/teams")
     public ResponseEntity<?> getEnterpriseTeams(@PathVariable Long id) {
         var result = this.enterpriseService.getTeamsByEnterpriseId(id)

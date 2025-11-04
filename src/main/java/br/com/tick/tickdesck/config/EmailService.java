@@ -1,4 +1,4 @@
-package br.com.tick.tickdesck.models.emails;
+package br.com.tick.tickdesck.config;
 
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;

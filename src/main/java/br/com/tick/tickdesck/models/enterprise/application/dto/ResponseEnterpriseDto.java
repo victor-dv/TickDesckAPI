@@ -10,7 +10,8 @@ public record ResponseEnterpriseDto(
         String email,
         String corporateName,
         String fantasyName,
-        String phone
+        String phone,
+        String cnpj
 ) {
     public static ResponseEnterpriseDto fromEnterpriseEntity(EnterpriseEntity enterpriseEntity) {
         return new ResponseEnterpriseDto(
@@ -18,7 +19,8 @@ public record ResponseEnterpriseDto(
                 enterpriseEntity.getEmail(),
                 enterpriseEntity.getCorporateName(),
                 enterpriseEntity.getFantasyName(),
-                enterpriseEntity.getPhone()
+                enterpriseEntity.getPhone(),
+                enterpriseEntity.getCnpj()
         );
     }
 }
