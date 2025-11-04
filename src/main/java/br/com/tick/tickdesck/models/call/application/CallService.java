@@ -88,12 +88,8 @@ public class CallService {
 
     // Busca um chamado pelo número, lança exceção se não encontrar
     public CallsEntity getCall(Long id) {
-        CallsEntity call = callRepository.findById(id)
+        return callRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Chamado não encontrado"));
-        if (!call.isStatus()) {
-            throw new IllegalArgumentException("Chamado está fechado");
-        }
-        return call;
     }
 
     // Lista todos os chamados, lança exceção se não houver nenhum

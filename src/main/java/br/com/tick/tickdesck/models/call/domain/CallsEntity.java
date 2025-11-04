@@ -55,6 +55,13 @@ public class CallsEntity {
     @Column(name = "data_atualizacao", nullable = false)
     private LocalDateTime dataAtualizacao;
 
+    @UpdateTimestamp
+    @Column(name = "data_finalizacao", nullable = false)
+    private LocalDateTime dataHoraFechamento;
+
+    @ManyToOne
+    @JoinColumn(name = "userFechamento_id", referencedColumnName = "id")
+    private UserEntity userFechamento;
 
 }
 
