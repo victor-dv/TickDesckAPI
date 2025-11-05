@@ -1,8 +1,13 @@
 package br.com.tick.tickdesck.models.auditoria_call.application.dto;
 
 import br.com.tick.tickdesck.models.auditoria_call.domain.ActionEntity;
+import br.com.tick.tickdesck.models.files.application.dto.FileDto;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public record  ResponseActionDto(
         Long id,
@@ -10,8 +15,8 @@ public record  ResponseActionDto(
         RoleStatusAction statusAction,
         LocalDateTime data,
         UserInfo user,
-        CallInfo call
-) {
+        CallInfo call,
+        List<FileDto> files) {
 
     public static ResponseActionDto fromEntity(ActionEntity entity) {
         return new ResponseActionDto(
@@ -32,7 +37,21 @@ public record  ResponseActionDto(
                         entity.getCallsEntity().getTeam().getName(),
                         entity.getCallsEntity().getUrgencia().toString(),
                         entity.getCallsEntity().isStatus()
-                )
+                ),
+                entity.getFile().stream().map(file -> {
+                    Path path = Paths.get(file.getPath());
+                    boolean exists = Files.exists(path);
+
+                    if (!exists) {
+                        file.setPath("Arquivo não encontrado");
+                    }
+                    return new FileDto(
+                            file.getId(),
+                            file.getName(),
+                            file.getType(),
+                            file.getPath()
+                    );
+                }).toList()
         );
     }
 
