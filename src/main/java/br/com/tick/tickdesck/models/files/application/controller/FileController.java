@@ -40,4 +40,10 @@ public class FileController {
 
     // se a pasta uploads nao existir, criar
 
+
+    @GetMapping("/download/{fileId}")
+    public ResponseEntity<?> FileByActionId(@PathVariable Long fileId) {
+        var fileEntity = fileService.downloadFile(fileId);
+        return ResponseEntity.status(HttpStatus.OK).body(fileEntity);
+    }
 }
