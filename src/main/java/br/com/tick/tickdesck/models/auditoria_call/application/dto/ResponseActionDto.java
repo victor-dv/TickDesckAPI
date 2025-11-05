@@ -7,6 +7,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 
 public record  ResponseActionDto(
@@ -38,6 +39,7 @@ public record  ResponseActionDto(
                         entity.getCallsEntity().getUrgencia().toString(),
                         entity.getCallsEntity().isStatus()
                 ),
+                entity.getFile() == null ? Collections.singletonList(new FileDto()) :
                 entity.getFile().stream().map(file -> {
                     Path path = Paths.get(file.getPath());
                     boolean exists = Files.exists(path);
