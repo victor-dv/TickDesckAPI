@@ -1,6 +1,6 @@
 package br.com.tick.tickdesck.models.user_interno.application.controller;
 
-import br.com.tick.tickdesck.models.password.application.dto.UpdatePasswordDto;
+import br.com.tick.tickdesck.config.password.application.dto.UpdatePasswordDto;
 import br.com.tick.tickdesck.models.user_interno.application.AuthUserService;
 import br.com.tick.tickdesck.models.user_interno.application.UserService;
 import br.com.tick.tickdesck.models.user_interno.application.dto.*;

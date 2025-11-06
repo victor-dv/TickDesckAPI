@@ -63,13 +63,15 @@ public class CallService {
         call.setUserResponsavel(userResponsavel);
         call.setTeam(team);
 
-        if (userResponsavel.getTeamEntity() == null) {
-            throw new IllegalArgumentException("O usuário responsável '" + userResponsavel.getName() + "' não está associado a nenhuma equipe.");
-        }
-        if (!userResponsavel.getTeamEntity().getId().equals(team.getId())) {
-            throw new IllegalArgumentException("O usuário responsável '" + userResponsavel.getName() +
-                    "' pertence à equipe '" + userResponsavel.getTeamEntity().getName() +
-                    "', mas o chamado está sendo atribuído à equipe '" + team.getName() + "'.");
+        if (userResponsavel != null) {
+            if (userResponsavel.getTeamEntity() == null) {
+                throw new IllegalArgumentException("O usuário responsável '" + userResponsavel.getName() + "' não está associado a nenhuma equipe.");
+            }
+            if (!userResponsavel.getTeamEntity().getId().equals(team.getId())) {
+                throw new IllegalArgumentException("O usuário responsável '" + userResponsavel.getName() +
+                        "' pertence à equipe '" + userResponsavel.getTeamEntity().getName() +
+                        "', mas o chamado está sendo atribuído à equipe '" + team.getName() + "'.");
+            }
         }
 
         call.setStatus(createCallDto.status());

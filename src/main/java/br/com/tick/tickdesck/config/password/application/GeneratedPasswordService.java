@@ -1,4 +1,4 @@
-package br.com.tick.tickdesck.models.password.application;
+package br.com.tick.tickdesck.config.password.application;
 
 import java.security.SecureRandom;
 import java.util.Base64;
