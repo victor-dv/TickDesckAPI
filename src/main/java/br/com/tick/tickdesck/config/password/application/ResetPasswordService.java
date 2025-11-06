@@ -1,7 +1,7 @@
-package br.com.tick.tickdesck.models.password.application;
+package br.com.tick.tickdesck.config.password.application;
 
-import br.com.tick.tickdesck.models.password.domain.ResetPasswordEntity;
-import br.com.tick.tickdesck.models.password.repository.ResetPasswordRepository;
+import br.com.tick.tickdesck.config.password.domain.ResetPasswordEntity;
+import br.com.tick.tickdesck.config.password.repository.ResetPasswordRepository;
 import br.com.tick.tickdesck.models.user_interno.domain.UserEntity;
 import br.com.tick.tickdesck.models.user_interno.infra.UserRepository;
 import jakarta.transaction.Transactional;

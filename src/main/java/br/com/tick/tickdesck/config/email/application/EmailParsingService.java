@@ -1,4 +1,4 @@
-package br.com.tick.tickdesck.config;
+package br.com.tick.tickdesck.config.email.application;
 
 import jakarta.mail.BodyPart;
 import jakarta.mail.Message;
@@ -16,7 +16,7 @@ import java.io.IOException;
 @Service
 public class EmailParsingService {
     private static final Logger log = LoggerFactory.getLogger(EmailParsingService.class);
-    
+
     public String parseEmailContent(MimeMessage message) {
         try {
             return getTextFromMessage(message);

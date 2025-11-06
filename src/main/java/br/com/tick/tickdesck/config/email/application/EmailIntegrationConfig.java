@@ -1,8 +1,10 @@
-package br.com.tick.tickdesck.config;
+package br.com.tick.tickdesck.config.email.application;
 
+import br.com.tick.tickdesck.models.call.domain.CallsEntity;
 import jakarta.mail.internet.MimeMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -36,11 +38,14 @@ public class EmailIntegrationConfig {
     @Value("${mail.imap.password}")
     private String imapPassword;
 
-    private final EmailParsingService emailParsingService;
+    @Value("${email.call.auto.create:true}")
+    private boolean autoCreateCall;
 
-    public EmailIntegrationConfig(EmailParsingService emailParsingService) {
-        this.emailParsingService = emailParsingService;
-    }
+    @Autowired
+    private EmailParsingService emailParsingService;
+
+    @Autowired
+    private EmailCallProcessorService emailCallProcessorService;
 
     @Bean
     public ImapMailReceiver imapMailReceiver() {
@@ -63,10 +68,8 @@ public class EmailIntegrationConfig {
             javaMailProperties.put("mail.imaps.socketFactory.port", imapPort);
             javaMailProperties.put("mail.imaps.connectiontimeout", "5000");
             javaMailProperties.put("mail.imaps.timeout", "5000");
-            // Propriedade para lidar com text/html e multipartes
             javaMailProperties.put("mail.mime.allowencodedmessages", "true");
             javaMailProperties.put("mail.mime.decodefilename", "true");
-
 
             receiver.setJavaMailProperties(javaMailProperties);
 
@@ -90,21 +93,29 @@ public class EmailIntegrationConfig {
                 .channel("emailInboundChannel")
                 .handle(MimeMessage.class, (payload, headers) -> {
                     try {
-                        log.info("NOVO E-MAIL RECEBIDO | Assunto: {}", payload.getSubject() );
+                        log.info("📬 NOVO E-MAIL RECEBIDO | Assunto: {}", payload.getSubject());
 
-                        // ETAPA 1: Usar o serviço de parsing para ler o conteúdo
-                        String from = (payload.getFrom() != null && payload.getFrom().length > 0) ? payload.getFrom()[0].toString() : "desconhecido";
-                        String subject = payload.getSubject();
+                        if (autoCreateCall) {
+                            CallsEntity call = emailCallProcessorService.processEmailAndCreateCall(payload);
 
-                        // Esta é a mágica! Chama o parser.
-                        String body = emailParsingService.parseEmailContent(payload);
+                            log.info("🎫 Chamado #{} criado automaticamente a partir do email",
+                                    call.getNumberCall());
 
-                        log.debug("📨 Conteúdo extraído: {}...", body.substring(0, Math.min(body.length(), 100)));
-                        System.out.println(body);
+                        } else {
+                            String from = (payload.getFrom() != null && payload.getFrom().length > 0)
+                                    ? payload.getFrom()[0].toString()
+                                    : "desconhecido";
+                            String subject = payload.getSubject();
+                            String body = emailParsingService.parseEmailContent(payload);
 
+                            log.info("📨 Email processado (auto-create desabilitado) | De: {} | Assunto: {}",
+                                    from, subject);
+                            log.debug("Conteúdo: {}...",
+                                    body.substring(0, Math.min(body.length(), 100)));
+                        }
 
                     } catch (Exception e) {
-                        log.error("Erro ao processar e-mail", e);
+                        log.error("❌ Erro ao processar e-mail", e);
                     }
                     return null;
                 })

@@ -1,4 +1,4 @@
-package br.com.tick.tickdesck.models.password.domain;
+package br.com.tick.tickdesck.config.password.domain;
 
 import br.com.tick.tickdesck.models.user_interno.domain.UserEntity;
 import jakarta.persistence.*;
