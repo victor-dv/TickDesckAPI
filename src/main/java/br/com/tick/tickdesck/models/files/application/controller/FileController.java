@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -39,5 +40,12 @@ public class FileController {
     }
 
     // se a pasta uploads nao existir, criar
+
+
+    @GetMapping("/download/{fileId}")
+    public ResponseEntity<?> FileByActionId(@PathVariable Long fileId) {
+        var fileEntity = fileService.downloadFile(fileId);
+        return ResponseEntity.ok().contentType(MediaType.parseMediaType("application/octet-stream")).body(fileEntity);
+    }
 
 }

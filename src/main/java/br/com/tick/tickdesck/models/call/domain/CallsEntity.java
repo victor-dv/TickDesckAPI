@@ -5,9 +5,11 @@ import br.com.tick.tickdesck.models.requisitantes.domain.RequisitanteEntity;
 import br.com.tick.tickdesck.models.team.domain.TeamEntity;
 import br.com.tick.tickdesck.models.user_interno.domain.UserEntity;
 import br.com.tick.tickdesck.models.user_externo.domain.UserExternoEntity;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.SourceType;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
@@ -55,6 +57,13 @@ public class CallsEntity {
     @Column(name = "data_atualizacao", nullable = false)
     private LocalDateTime dataAtualizacao;
 
+    @Nullable
+    @Column(name = "data_finalizacao", nullable = true)
+    private LocalDateTime dataHoraFechamento;
+
+    @ManyToOne
+    @JoinColumn(name = "userFechamento_id", referencedColumnName = "id")
+    private UserEntity userFechamento;
 
 }
 

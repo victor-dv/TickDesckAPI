@@ -16,12 +16,19 @@ public record ResponseCallDto(
         ResponseTeamDto team,
         UrgenciaCallDto urgency,
         LocalDateTime previsaoSolucao,
-        LocalDateTime dataAbertura
+        LocalDateTime dataAbertura,
+        LocalDateTime dataHoraFechamento,
+        ResponseUserDto usuarioFechamento
+
+
 ) {
     public static ResponseCallDto fromCallEntity(CallsEntity call) {
 
         ResponseUserDto userDto = call.getUserResponsavel() != null
                 ? ResponseUserDto.fromUser(call.getUserResponsavel())
+                : null;
+        ResponseUserDto userFechamentoDto = call.getUserFechamento() != null
+                ? ResponseUserDto.fromUser(call.getUserFechamento())
                 : null;
         ResponseTeamDto teamDto = call.getTeam() != null
                 ? ResponseTeamDto.fromTeamEntity(call.getTeam())
@@ -37,7 +44,10 @@ public record ResponseCallDto(
                 teamDto,
                 call.getUrgencia(),
                 call.getPrevisaoSolucao(),
-                call.getDataAbertura()
+                call.getDataAbertura(),
+                call.getDataHoraFechamento(),
+                userFechamentoDto
+
         );
     }
 }

@@ -94,7 +94,6 @@ public class CallController {
         return ResponseEntity.ok(result);
     }
 
-
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         this.callService.deleteCall(id);

@@ -6,6 +6,7 @@ import br.com.tick.tickdesck.models.call.application.dto.UrgenciaCallDto;
 import br.com.tick.tickdesck.models.call.domain.CallsEntity;
 import br.com.tick.tickdesck.models.call.infra.CallRepository;
 import br.com.tick.tickdesck.models.requisitantes.repository.RequisitanteRepository;
+import br.com.tick.tickdesck.models.team.domain.TeamEntity;
 import br.com.tick.tickdesck.models.team.infra.TeamRepository;
 import br.com.tick.tickdesck.models.user_interno.application.dto.Role;
 import br.com.tick.tickdesck.models.user_interno.domain.UserEntity;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CallService {
@@ -88,12 +90,8 @@ public class CallService {
 
     // Busca um chamado pelo número, lança exceção se não encontrar
     public CallsEntity getCall(Long id) {
-        CallsEntity call = callRepository.findById(id)
+        return callRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Chamado não encontrado"));
-        if (!call.isStatus()) {
-            throw new IllegalArgumentException("Chamado está fechado");
-        }
-        return call;
     }
 
     // Lista todos os chamados, lança exceção se não houver nenhum
@@ -120,13 +118,21 @@ public class CallService {
         if (updatedCallDto.urgency() != null) {
             existingCall.setUrgencia(updatedCallDto.urgency());
         }
+        if(updatedCallDto.previsaoSolucao() != null) {
+            existingCall.setPrevisaoSolucao(updatedCallDto.previsaoSolucao());
+        }
+        if(updatedCallDto.teamId() != null && updatedCallDto.teamId() > 0) {
+            TeamEntity team = teamRepository.findById(updatedCallDto.teamId())
+                    .orElseThrow(() -> new IllegalArgumentException("Time não encontrado"));
 
-      /*  if (updatedCallDto.usuarioFechamento() != null) {
-            existingCall.setUserResponsavel(updatedCallDto.usuarioFechamento());
-        }*/
-/*
-        existingCall.setDataFechamento(updatedCallDto.dataFechamento());
-*/
+            existingCall.setTeam(team);
+        }
+        if(updatedCallDto.userResponsavelId() != null && updatedCallDto.userResponsavelId() > 0) {
+            UserEntity user = userRepository.findById(updatedCallDto.userResponsavelId())
+                    .orElseThrow(() -> new IllegalArgumentException("Usuário responsável não encontrado!"));
+
+            existingCall.setUserResponsavel(user);
+        }
 
         return callRepository.save(existingCall);
     }
@@ -136,7 +142,14 @@ public class CallService {
         CallsEntity existingCall = callRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Chamado não encontrado"));
 
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        var loggedUser = userRepository.findById(Long.decode((String) authentication.getName()))
+                .orElseThrow(() -> new IllegalArgumentException("Usuário autenticado não encontrado"));
+
         existingCall.setStatus(false); // Fecha o chamado
+        existingCall.setUserFechamento(loggedUser); // Define o usuário de fechamento
+        existingCall.setDataHoraFechamento(LocalDateTime.now());
         return callRepository.save(existingCall);
     }
 
@@ -162,6 +175,10 @@ public class CallService {
         existingCall.setStatus(true);
         existingCall.setDataAbertura(LocalDateTime.now());
         existingCall.setPrevisaoSolucao(calcularPrevisao(existingCall.getUrgencia()));
+
+        // Ao reabrir um chamado eu anulo os valores de fechamento pra resetar
+        existingCall.setDataHoraFechamento(null);
+        existingCall.setUserFechamento(null);
 
         return callRepository.save(existingCall);
     }
