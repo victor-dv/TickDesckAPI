@@ -21,7 +21,7 @@ public class TeamEntity {
     @JoinColumn(name = "enterpise_id", referencedColumnName = "id", nullable = false)
     @JsonBackReference
     private EnterpriseEntity enterprise;
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String name;
 
     @OneToMany(mappedBy = "teamEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
