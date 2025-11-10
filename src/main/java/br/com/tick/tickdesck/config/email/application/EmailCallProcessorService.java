@@ -1,6 +1,7 @@
 package br.com.tick.tickdesck.config.email.application;
 
 import br.com.tick.tickdesck.config.email.dto.EmailCallDataDto;
+import br.com.tick.tickdesck.config.llm.GeminiAiService;
 import br.com.tick.tickdesck.models.call.application.CallService;
 import br.com.tick.tickdesck.models.call.application.dto.CreateCallDto;
 import br.com.tick.tickdesck.models.call.application.dto.UrgenciaCallDto;
@@ -36,6 +37,9 @@ public class EmailCallProcessorService {
     private LocalEmailParseService localEmailParserService;
 
     @Autowired
+    private GeminiAiService geminiAiService;
+
+    @Autowired
     private EmailParsingService emailParsingService;
 
     @Autowired
@@ -59,8 +63,11 @@ public class EmailCallProcessorService {
     @Value("${email.call.default.user.responsavel.id:#{null}}")
     private Long defaultUserResponsavelId;
 
+    @Value("${email.call.use.ai:true}")
+    private boolean useAi;
 
-     //Processa um email recebido e cria um chamado automaticamente
+
+    //Processa um email recebido e cria um chamado automaticamente
 
     @Transactional
     public CallsEntity processEmailAndCreateCall(MimeMessage message) {
@@ -72,10 +79,24 @@ public class EmailCallProcessorService {
 
             log.info("📧 Processando email para criar chamado | De: {} | Assunto: {}", from, subject);
 
-            EmailCallDataDto callData = localEmailParserService.extractCallDataFromEmail(from, subject, body);
-
-            log.info("🔧 Dados extraídos via filtro de palavras-chave | Título: {} | Urgência: {}",
-                    callData.getTitle(), callData.getUrgency());
+            // Usar IA ou filtro de palavras-chave baseado na configuração
+            EmailCallDataDto callData;
+            if (useAi) {
+                try {
+                    callData = geminiAiService.extractCallDataFromEmail(from, subject, body);
+                    log.info("🤖 Dados extraídos via Gemini AI | Título: {} | Urgência: {}",
+                            callData.getTitle(), callData.getUrgency());
+                } catch (Exception e) {
+                    log.warn("⚠️ Erro ao usar Gemini AI, usando parser local como fallback: {}", e.getMessage());
+                    callData = localEmailParserService.extractCallDataFromEmail(from, subject, body);
+                    log.info("🔧 Dados extraídos via filtro de palavras-chave (fallback) | Título: {} | Urgência: {}",
+                            callData.getTitle(), callData.getUrgency());
+                }
+            } else {
+                callData = localEmailParserService.extractCallDataFromEmail(from, subject, body);
+                log.info("🔧 Dados extraídos via filtro de palavras-chave | Título: {} | Urgência: {}",
+                        callData.getTitle(), callData.getUrgency());
+            }
 
             RequisitanteEntity requisitante = findOrCreateRequisitante(callData);
 
@@ -130,7 +151,7 @@ public class EmailCallProcessorService {
     }
 
 
-     //Busca requisitante existente ou cria um novo
+    //Busca requisitante existente ou cria um novo
 
     private RequisitanteEntity findOrCreateRequisitante(EmailCallDataDto callData) {
         String email = callData.getRequisitanteEmail().toLowerCase();
@@ -171,7 +192,7 @@ public class EmailCallProcessorService {
         };
     }
 
-        //Determina a equipe com base no conteúdo do email
+    //Determina a equipe com base no conteúdo do email
     public TeamEntity determineTeamByContent(String subject, String body) {
         String content = (subject + " " + body).toLowerCase();
 
