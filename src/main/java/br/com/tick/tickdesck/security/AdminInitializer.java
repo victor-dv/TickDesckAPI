@@ -32,19 +32,24 @@ public class AdminInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        if(enterpriseRepository.findByCnpjOrEmail("", "tickdesck@gmail.com").isEmpty()) {
-            EnterpriseEntity enterpriseEntity = new EnterpriseEntity();
+        // Buscar ou criar empresa e equipe padrão
+        EnterpriseEntity enterpriseEntity;
+        TeamEntity teamEntity;
+        
+        var existingEnterprise = enterpriseRepository.findByCnpjOrEmail("", "tickdesck@gmail.com");
+        if(existingEnterprise.isEmpty()) {
+            enterpriseEntity = new EnterpriseEntity();
             enterpriseEntity.setEmail("tickdesck@gmail.com");
             enterpriseEntity.setPhone("11994399077");
             enterpriseEntity.setCnpj("54506603000199");
             enterpriseEntity.setFantasyName("TickDesk");
             enterpriseEntity.setCorporateName("TickDesk LTDA");
-            enterpriseRepository.save(enterpriseEntity);
+            enterpriseEntity = enterpriseRepository.save(enterpriseEntity);
 
-            TeamEntity teamEntity = new TeamEntity();
+            teamEntity = new TeamEntity();
             teamEntity.setName("TickDesk LTDA");
             teamEntity.setEnterprise(enterpriseEntity);
-            teamRepository.save(teamEntity );
+            teamEntity = teamRepository.save(teamEntity);
 
             UserEntity adminUser = new UserEntity();
             adminUser.setName("Administrador TIICKDESCK");
@@ -57,8 +62,41 @@ public class AdminInitializer implements CommandLineRunner {
 
             userRepository.save(adminUser);
             System.out.println("Usuário administrador criado e configurado com sucesso!");
-        }else {
+        } else {
+            enterpriseEntity = existingEnterprise.get();
+            // Busca a equipe padrão pelo nome ou pela primeira equipe da empresa
+            EnterpriseEntity finalEnterpriseEntity = enterpriseEntity;
+            teamEntity = teamRepository.findByName("TickDesk LTDA")
+                    .orElseGet(() -> teamRepository.findByEnterpriseId(finalEnterpriseEntity.getId())
+                            .stream()
+                            .findFirst()
+                            .orElseThrow(() -> new RuntimeException("Equipe padrão não encontrada")));
             System.out.println("Usuário administrador já existe.");
+        }
+
+        // Criar usuário tickdeskIa para ações automáticas de email
+        createTickDeskIaUser(teamEntity);
+    }
+
+    private void createTickDeskIaUser(TeamEntity teamEntity) {
+        String iaUsername = "tickdeskIa";
+        var existingIaUser = userRepository.findByUsername(iaUsername);
+        
+        if (existingIaUser.isEmpty()) {
+            UserEntity iaUser = new UserEntity();
+            iaUser.setName("TickDesk IA");
+            iaUser.setUsername(iaUsername);
+            iaUser.setEmail("tickdeskia@tickdesck.com");
+            // Senha aleatória e longa, já que este usuário não será usado para login
+            iaUser.setPassword(passwordEncoder.encode("TickDeskIA@" + System.currentTimeMillis()));
+            iaUser.setRole(Role.SUPORT);
+            iaUser.setTeamEntity(teamEntity);
+            iaUser.setFirstAccess(false);
+
+            userRepository.save(iaUser);
+            System.out.println("Usuário TickDesk IA (tickdeskIa) criado com sucesso!");
+        } else {
+            System.out.println("Usuário TickDesk IA (tickdeskIa) já existe.");
         }
     }
 }

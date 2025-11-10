@@ -72,5 +72,29 @@
         public List<ActionEntity> getStatusActions(RoleStatusAction statusAction) {
             return actionRepository.findByStatusAction(statusAction);
         }
+
+        /**
+         * Cria uma ação para um chamado usando um userId específico (útil para criação automática via email)
+         */
+        public ActionEntity createActionWithUserId(Long callId, String description, Long userId, RoleStatusAction statusAction) {
+            var call = callRepository.findById(callId)
+                    .orElseThrow(() -> new IllegalArgumentException("Chamado não encontrado"));
+            
+            var statusCall = call.isStatus();
+            if (!statusCall) {
+                throw new IllegalArgumentException("Não é possível adicionar ações a um chamado fechado.");
+            }
+
+            var user = userRepository.findById(userId)
+                    .orElseThrow(() -> new IllegalArgumentException("Usuário não encontrado"));
+
+            ActionEntity action = new ActionEntity();
+            action.setDescription(description);
+            action.setUser(user);
+            action.setCallsEntity(call);
+            action.setStatusAction(statusAction != null ? statusAction : RoleStatusAction.PUBLIC);
+
+            return actionRepository.save(action);
+        }
     }
 

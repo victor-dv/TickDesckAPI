@@ -10,6 +10,7 @@ import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<UserEntity, Long> {
     Optional<UserEntity> findByEmail(String email);
+    Optional<UserEntity> findByUsername(String username);
     Optional<UserEntity> findByEmailOrUsername(String email, String username);
     List<UserEntity> findByTeamEntityId(Long teamId);
     @Query("SELECT u FROM UserEntity u WHERE u.teamEntity.enterprise.id = :enterpriseId")

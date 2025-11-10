@@ -55,12 +55,15 @@ public class GeminiAiService {
             
             Retorne APENAS um JSON válido (sem markdown, sem explicações) com esta estrutura exata:
             {
-              "title": "título do chamado (máximo 100 caracteres, resumo claro do problema)",
+              "title": "use o ASSUNTO do email como título (máximo 100 caracteres, remova prefixos como RE:, FWD:, etc)",
               "urgency": "BAIXA ou MEDIA ou ALTA (baseado na urgência implícita ou explícita no email)",
               "description": "descrição detalhada do problema extraída do corpo do email",
               "requisitanteEmail": "email do remetente",
               "requisitanteName": "nome do remetente se identificável, ou vazio"
             }
+            
+            IMPORTANTE: O campo "title" deve ser o ASSUNTO do email (após remover prefixos como RE:, FWD:, etc). 
+            Se o assunto estiver vazio, use as primeiras palavras do corpo do email.
             
             Regras para classificação de urgência:
             - ALTA: sistema fora do ar, erro crítico, bloqueio total, palavras como "urgente", "crítico", "parado"
