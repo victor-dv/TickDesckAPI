@@ -121,16 +121,16 @@ public class CallService {
         if (updatedCallDto.urgency() != null) {
             existingCall.setUrgencia(updatedCallDto.urgency());
         }
-        if(updatedCallDto.previsaoSolucao() != null) {
+        if (updatedCallDto.previsaoSolucao() != null) {
             existingCall.setPrevisaoSolucao(updatedCallDto.previsaoSolucao());
         }
-        if(updatedCallDto.teamId() != null && updatedCallDto.teamId() > 0) {
+        if (updatedCallDto.teamId() != null && updatedCallDto.teamId() > 0) {
             TeamEntity team = teamRepository.findById(updatedCallDto.teamId())
                     .orElseThrow(() -> new IllegalArgumentException("Time não encontrado"));
 
             existingCall.setTeam(team);
         }
-        if(updatedCallDto.userResponsavelId() != null && updatedCallDto.userResponsavelId() > 0) {
+        if (updatedCallDto.userResponsavelId() != null && updatedCallDto.userResponsavelId() > 0) {
             UserEntity user = userRepository.findById(updatedCallDto.userResponsavelId())
                     .orElseThrow(() -> new IllegalArgumentException("Usuário responsável não encontrado!"));
 
@@ -235,5 +235,19 @@ public class CallService {
         return callRepository.findByNumberCall(numberCall);
     }
 
+
+    //Total de chamados da empresa
+    public Long totalChamadosPorEmpresa(Long idEmpresa) {
+        List<CallsEntity> calls = callRepository.findByTeam_Enterprise_Id(idEmpresa);
+        return (long) calls.size();
+    }
+    //Total de chamados abertos da empresa
+    public Long totalChamadosAbertosPorEmpresa(Long idEmpresa) {
+        List<CallsEntity> calls = callRepository.findByTeam_Enterprise_Id(idEmpresa);
+        return calls.stream().filter(CallsEntity::isStatus).count();
+    }
+    //Total de chamados fechados da empresa
+    //total de chamados por equipe
+    // Total de chamados por urgencia
 
 }
