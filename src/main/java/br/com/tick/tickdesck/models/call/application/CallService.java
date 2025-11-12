@@ -52,6 +52,7 @@ public class CallService {
         CallsEntity call = new CallsEntity();
         call.setNumberCall(novoNumero);
         call.setTitle(createCallDto.title());
+        call.setExterno(createCallDto.isExterno());
 
         call.setRequisitante(requisitante);
 
@@ -83,6 +84,8 @@ public class CallService {
             call.setPrevisaoSolucao(calcularPrevisao(createCallDto.urgency()));
         }
         call.setDataAbertura(createCallDto.dataAbertura());
+
+
 
         return callRepository.save(call);
     }

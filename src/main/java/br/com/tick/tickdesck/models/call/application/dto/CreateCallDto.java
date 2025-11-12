@@ -11,7 +11,7 @@ public record  CreateCallDto (
         Long teamId,
         UrgenciaCallDto urgency,
         LocalDateTime dataAbertura,
-        LocalDateTime previsaoSolucao
-
+        LocalDateTime previsaoSolucao,
+        boolean isExterno
 ) {
 }

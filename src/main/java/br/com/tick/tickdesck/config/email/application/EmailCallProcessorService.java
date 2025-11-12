@@ -131,7 +131,8 @@ public class EmailCallProcessorService {
                     team.getId(),
                     urgencia,
                     LocalDateTime.now(),
-                    null
+                    null,
+                    true
             );
 
             CallsEntity call = callService.createCall(createCallDto);

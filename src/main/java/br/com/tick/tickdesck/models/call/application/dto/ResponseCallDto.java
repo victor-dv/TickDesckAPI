@@ -18,7 +18,8 @@ public record ResponseCallDto(
         LocalDateTime previsaoSolucao,
         LocalDateTime dataAbertura,
         LocalDateTime dataHoraFechamento,
-        ResponseUserDto usuarioFechamento
+        ResponseUserDto usuarioFechamento,
+        boolean isExterno
 
 
 ) {
@@ -46,8 +47,8 @@ public record ResponseCallDto(
                 call.getPrevisaoSolucao(),
                 call.getDataAbertura(),
                 call.getDataHoraFechamento(),
-                userFechamentoDto
-
+                userFechamentoDto,
+                call.isExterno()
         );
     }
 }

@@ -65,5 +65,7 @@ public class CallsEntity {
     @JoinColumn(name = "userFechamento_id", referencedColumnName = "id")
     private UserEntity userFechamento;
 
+    @Column(nullable = false)
+    private boolean isExterno = false;
 }
 
