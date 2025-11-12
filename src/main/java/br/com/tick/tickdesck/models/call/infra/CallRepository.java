@@ -1,5 +1,6 @@
 package br.com.tick.tickdesck.models.call.infra;
 
+import br.com.tick.tickdesck.models.call.application.dto.UrgenciaCallDto;
 import br.com.tick.tickdesck.models.call.domain.CallsEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -14,6 +15,7 @@ public interface CallRepository extends JpaRepository<CallsEntity, Long> {
     Optional<CallsEntity> findById(Long id);
 
     List<CallsEntity> findByTeamIdAndStatusTrue(Long teamId);
+
     List<CallsEntity> findByTeam_Enterprise_Id(Long enterpriseId);
 
     List<CallsEntity> findByUserResponsavelIdAndStatusTrue(Long userId);
@@ -23,5 +25,9 @@ public interface CallRepository extends JpaRepository<CallsEntity, Long> {
 
     List<CallsEntity> findByTitleContainingIgnoreCase(String title);
 
-    List<CallsEntity>findByNumberCall(Integer numberCall);
+    List<CallsEntity> findByNumberCall(Integer numberCall);
+
+    Long countByTeamId(Long teamId);
+
+    Long countByUrgencia(UrgenciaCallDto urgencia);
 }

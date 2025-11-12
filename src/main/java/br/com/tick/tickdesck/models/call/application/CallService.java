@@ -1,5 +1,9 @@
 package br.com.tick.tickdesck.models.call.application;
 
+import br.com.tick.tickdesck.models.call.application.dto.CountCallsByTeamDto;
+import br.com.tick.tickdesck.models.call.application.dto.CountCallsByTeamsResponseDto;
+import br.com.tick.tickdesck.models.call.application.dto.CountCallsByUrgencyDto;
+import br.com.tick.tickdesck.models.call.application.dto.CountCallsByUrgencyResponseDto;
 import br.com.tick.tickdesck.models.call.application.dto.CreateCallDto;
 import br.com.tick.tickdesck.models.call.application.dto.UpdateCallDto;
 import br.com.tick.tickdesck.models.call.application.dto.UrgenciaCallDto;
@@ -17,6 +21,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -251,12 +256,46 @@ public class CallService {
         List<CallsEntity> calls = callRepository.findByTeam_Enterprise_Id(idEmpresa);
         return calls.stream().filter(call -> !call.isStatus()).count();
     }
-    //total de chamados por equipe
+    //Total de chamados por equipe
     public Long totalChamadosPorEquipe(Long idEquipe) {
-        List<CallsEntity> calls = callRepository.findByTeamIdAndStatusTrue(idEquipe);
-        return (long) calls.size();
+        return callRepository.countByTeamId(idEquipe);
     }
-    // Total de chamados por urgencia
 
+    //Total de chamados por urgencia
+    public Long totalChamadosPorUrgencia(UrgenciaCallDto urgencia) {
+        return callRepository.countByUrgencia(urgencia);
+    }
+
+    //Retorna todos os times com suas quantidades de chamados
+    public CountCallsByTeamsResponseDto todosChamadosPorEquipe() {
+        List<TeamEntity> teams = teamRepository.findAll();
+        List<CountCallsByTeamDto> timesComContagem = new ArrayList<>();
+
+        for (TeamEntity team : teams) {
+            Long totalChamados = callRepository.countByTeamId(team.getId());
+            timesComContagem.add(new CountCallsByTeamDto(
+                    team.getId(),
+                    team.getName(),
+                    totalChamados
+            ));
+        }
+
+        return new CountCallsByTeamsResponseDto(timesComContagem);
+    }
+
+    //Retorna todas as urgências com suas quantidades de chamados
+    public CountCallsByUrgencyResponseDto todosChamadosPorUrgencia() {
+        List<CountCallsByUrgencyDto> urgenciasComContagem = new ArrayList<>();
+
+        for (UrgenciaCallDto urgencia : UrgenciaCallDto.values()) {
+            Long totalChamados = callRepository.countByUrgencia(urgencia);
+            urgenciasComContagem.add(new CountCallsByUrgencyDto(
+                    urgencia,
+                    totalChamados
+            ));
+        }
+
+        return new CountCallsByUrgencyResponseDto(urgenciasComContagem);
+    }
 
 }

@@ -1,6 +1,9 @@
 package br.com.tick.tickdesck.models.call.application.controller;
 
 import br.com.tick.tickdesck.models.call.application.CallService;
+import br.com.tick.tickdesck.models.call.application.dto.CountCallsByTeamsResponseDto;
+import br.com.tick.tickdesck.models.call.application.dto.CountCallsByUrgencyResponseDto;
+import br.com.tick.tickdesck.models.call.application.dto.CountCallsEnterpriseDto;
 import br.com.tick.tickdesck.models.call.application.dto.CreateCallDto;
 import br.com.tick.tickdesck.models.call.application.dto.ResponseCallDto;
 import br.com.tick.tickdesck.models.call.application.dto.UpdateCallDto;
@@ -105,12 +108,24 @@ public class CallController {
         return ResponseEntity.ok(result);
     }
 
-    @GetMapping("/count/{id}")
-    public ResponseEntity<?> countCallsByEnterprise(@PathVariable Long id) {
+    @GetMapping("/count/enterprise/{id}")
+    public ResponseEntity<CountCallsEnterpriseDto> countCallsByEnterprise(@PathVariable Long id) {
         Long count = this.callService.totalChamadosPorEmpresa(id);
         Long countOpen = this.callService.totalChamadosAbertosPorEmpresa(id);
         Long countClosed = this.callService.totalChamadosFechadosPorEmpresa(id);
-        return ResponseEntity.status(HttpStatus.OK).body("Total de chamados da epresa: " + count + " | Total de chamados abertos: " + countOpen +
-                "| Total de chamados fechados: " + countClosed);
+        CountCallsEnterpriseDto response = new CountCallsEnterpriseDto(count, countOpen, countClosed);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @GetMapping("/count/team")
+    public ResponseEntity<CountCallsByTeamsResponseDto> countCallsByAllTeams() {
+        CountCallsByTeamsResponseDto response = this.callService.todosChamadosPorEquipe();
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @GetMapping("/count/urgency")
+    public ResponseEntity<CountCallsByUrgencyResponseDto> countCallsByAllUrgencies() {
+        CountCallsByUrgencyResponseDto response = this.callService.todosChamadosPorUrgencia();
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 }
