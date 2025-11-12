@@ -28,6 +28,7 @@ public class LocalEmailParseService {
                 .description(description)
                 .requisitanteEmail(requisitanteEmail)
                 .requisitanteName(requisitanteName)
+                .suggestedSolutions(null) // Parser local não gera soluções sugeridas (apenas IA)
                 .build();
     }
 

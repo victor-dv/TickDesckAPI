@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -15,4 +17,5 @@ public class EmailCallDataDto {
     private String description;
     private String requisitanteEmail;
     private String requisitanteName;
+    private List<String> suggestedSolutions; // Soluções sugeridas para o problema
 }

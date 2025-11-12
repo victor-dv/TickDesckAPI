@@ -140,8 +140,8 @@ public class EmailCallProcessorService {
             log.info("✅ Chamado criado com sucesso | Número: {} | ID: {}",
                     call.getNumberCall(), call.getId());
 
-            // Criar ação com o corpo do email
-            createActionFromEmailBody(call, body, userResponsavel);
+            // Criar ação com o corpo do email e soluções sugeridas
+            createActionFromEmailBody(call, body, callData, userResponsavel);
 
             return call;
 
@@ -222,8 +222,8 @@ public class EmailCallProcessorService {
                 .orElseThrow(() -> new RuntimeException("Equipe padrão não encontrada"));
     }
 
-    //Cria uma ação no chamado com o corpo do email
-    private void createActionFromEmailBody(CallsEntity call, String emailBody, UserEntity userResponsavel) {
+    //Cria uma ação no chamado com o corpo do email e soluções sugeridas
+    private void createActionFromEmailBody(CallsEntity call, String emailBody, EmailCallDataDto callData, UserEntity userResponsavel) {
         try {
             // Busca o usuário tickdeskIa para ações automáticas de email
             Long userIdToUse = null;
@@ -250,37 +250,74 @@ public class EmailCallProcessorService {
                 }
             }
 
-            // Limpa o corpo do email removendo assinaturas e formatações desnecessárias
+            // Limpa o corpo do email removendo assinaturas, formatações desnecessárias e palavrões
             String cleanBody = cleanEmailBody(emailBody);
 
-            // Cria a ação com o corpo do email
+            // Monta o corpo da ação com descrição e soluções sugeridas
+            StringBuilder actionBody = new StringBuilder();
+            
+            // Adiciona a descrição do problema (já processada pela IA, mas pode vir do email original se IA falhar)
+            if (callData.getDescription() != null && !callData.getDescription().trim().isEmpty()) {
+                actionBody.append("📋 DESCRIÇÃO DO PROBLEMA:\n");
+                actionBody.append(callData.getDescription().trim());
+                actionBody.append("\n\n");
+            } else {
+                // Fallback: usa o corpo limpo do email se não houver descrição processada
+                actionBody.append("📧 CORPO DO EMAIL:\n");
+                actionBody.append(cleanBody);
+                actionBody.append("\n\n");
+            }
+
+            // Adiciona soluções sugeridas pela IA (se disponíveis)
+            if (callData.getSuggestedSolutions() != null && !callData.getSuggestedSolutions().isEmpty()) {
+                actionBody.append("💡 SOLUÇÕES SUGERIDAS:\n");
+                int solutionNumber = 1;
+                for (String solution : callData.getSuggestedSolutions()) {
+                    if (solution != null && !solution.trim().isEmpty()) {
+                        actionBody.append(String.format("%d. %s\n", solutionNumber++, solution.trim()));
+                    }
+                }
+            }
+
+            // Se o corpo da ação ficar muito grande, trunca
+            String finalActionBody = actionBody.toString().trim();
+            if (finalActionBody.length() > 10000) {
+                finalActionBody = finalActionBody.substring(0, 9997) + "...";
+            }
+
+            // Cria a ação com o conteúdo formatado
             actionService.createActionWithUserId(
                     call.getId(),
-                    cleanBody,
+                    finalActionBody.isEmpty() ? cleanBody : finalActionBody,
                     userIdToUse,
                     RoleStatusAction.PUBLIC
             );
 
-            log.info("📝 Ação criada no chamado {} com o corpo do email", call.getId());
+            log.info("📝 Ação criada no chamado {} com descrição e soluções sugeridas", call.getId());
         } catch (Exception e) {
             log.error("❌ Erro ao criar ação no chamado {}: {}", call.getId(), e.getMessage(), e);
             // Não lança exceção para não impedir a criação do chamado
         }
     }
 
-    //Limpa o corpo do email para uso na ação
+    //Limpa o corpo do email para uso na ação - remove assinaturas, formatações e palavrões
     private String cleanEmailBody(String body) {
         if (body == null || body.trim().isEmpty()) {
             return "Corpo do email vazio.";
         }
 
+        String cleanBody = body;
+
         // Remove assinaturas comuns de email
-        String cleanBody = body
+        cleanBody = cleanBody
                 .replaceAll("(?i)\\n--\\s*\\n.*", "") // Remove assinatura após --
                 .replaceAll("(?i)enviado do meu .*", "") // Remove "Enviado do meu iPhone"
                 .replaceAll("(?i)sent from my .*", "")
                 .replaceAll("(?i)^(re:|fwd:|fw:|enc:)\\s*", "") // Remove prefixos de reenvio
                 .trim();
+
+        // Remove palavrões e linguagem inadequada (fallback caso a IA não tenha removido)
+        cleanBody = removeProfanity(cleanBody);
 
         // Se o corpo ficou muito grande, trunca
         if (cleanBody.length() > 5000) {
@@ -288,5 +325,38 @@ public class EmailCallProcessorService {
         }
 
         return cleanBody.isEmpty() ? "Corpo do email vazio após limpeza." : cleanBody;
+    }
+
+    //Remove palavrões e linguagem inadequada do texto (fallback caso a IA não remova)
+    private String removeProfanity(String text) {
+        if (text == null || text.isEmpty()) {
+            return text;
+        }
+
+        // Lista de palavrões comuns em português (filtro de fallback)
+        // Padrões específicos de palavras ofensivas para remover/substituir
+        String[] profanityPatterns = {
+                // Palavrões comuns (usando regex case-insensitive com word boundaries)
+                "(?i)\\b(porra|caralho|merda|foda|fdp|pqp|vtnc|cu|buceta|piroca|rola)\\b",
+                // Expressões ofensivas comuns
+                "(?i)\\b(vai\\s+se\\s+foder|vai\\s+se\\s+fuder|vai\\s+tomar|vtnc|pqp)\\b",
+                // Palavras isoladas ofensivas comuns
+                "(?i)\\bputa(?!rio|ridade|nho|ca|do)\\b"  // "puta" mas não "computador" ou "putativo"
+        };
+
+        // Substitui palavrões por termos neutros ou remove
+        String cleaned = text;
+        for (String pattern : profanityPatterns) {
+            // Substitui por espaço para manter o fluxo do texto
+            cleaned = cleaned.replaceAll(pattern, "");
+        }
+
+        // Remove múltiplos espaços criados após remoções
+        cleaned = cleaned.replaceAll("\\s{2,}", " ").trim();
+
+        // Remove linhas vazias excessivas
+        cleaned = cleaned.replaceAll("\\n{3,}", "\n\n");
+
+        return cleaned;
     }
 }

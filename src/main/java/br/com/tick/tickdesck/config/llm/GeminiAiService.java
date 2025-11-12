@@ -11,6 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class GeminiAiService {
     private static final Logger log = LoggerFactory.getLogger(GeminiAiService.class);
@@ -44,33 +47,65 @@ public class GeminiAiService {
 
     private String buildPrompt(String from, String subject, String body) {
         return String.format("""
-            Você é um assistente especializado em extrair informações estruturadas de emails para criar chamados de help desk.
+            Você é um assistente especializado em análise de emails para criação de chamados de help desk.
+            Sua função é extrair informações estruturadas, limpar o conteúdo de palavrões e linguagem inadequada, e sugerir soluções práticas.
             
-            Analise o email abaixo e extraia as seguintes informações em formato JSON:
-            
-            Email:
+            Email a analisar:
             De: %s
             Assunto: %s
             Corpo: %s
             
-            Retorne APENAS um JSON válido (sem markdown, sem explicações) com esta estrutura exata:
+            INSTRUÇÕES IMPORTANTES:
+            
+            1. LIMPEZA DE CONTEÚDO:
+               - REMOVA TODOS os palavrões, xingamentos, palavras ofensivas e linguagem inadequada do texto
+               - Substitua por termos neutros e profissionais (ex: "problema", "dificuldade", "erro", "falha")
+               - Mantenha o significado técnico e a informação relevante
+               - Preserve a urgência e o contexto do problema mesmo após a limpeza
+            
+            2. ESTRUTURA DE RESPOSTA:
+            Retorne APENAS um JSON válido (sem markdown, sem explicações adicionais) com esta estrutura exata:
             {
-              "title": "use o ASSUNTO do email como título (máximo 100 caracteres, remova prefixos como RE:, FWD:, etc)",
-              "urgency": "BAIXA ou MEDIA ou ALTA (baseado na urgência implícita ou explícita no email)",
-              "description": "descrição detalhada do problema extraída do corpo do email",
+              "title": "título claro e objetivo baseado no assunto (máximo 100 caracteres, remova prefixos RE:, FWD:, etc)",
+              "urgency": "BAIXA ou MEDIA ou ALTA",
+              "description": "descrição detalhada e profissional do problema, SEM palavrões ou linguagem inadequada. Inclua: sintomas observados, mensagens de erro (se houver), passos para reproduzir o problema, contexto do usuário, impacto no trabalho",
               "requisitanteEmail": "email do remetente",
-              "requisitanteName": "nome do remetente se identificável, ou vazio"
+              "requisitanteName": "nome do remetente se identificável no email, caso contrário deixe vazio",
+              "suggestedSolutions": ["solução 1", "solução 2", "solução 3"]
             }
             
-            IMPORTANTE: O campo "title" deve ser o ASSUNTO do email (após remover prefixos como RE:, FWD:, etc). 
-            Se o assunto estiver vazio, use as primeiras palavras do corpo do email.
+            3. REGRAS PARA CLASSIFICAÇÃO DE URGÊNCIA:
+               - ALTA: sistema completamente fora do ar, erro crítico que impede trabalho, bloqueio total de acesso, perda de dados, palavras como "urgente", "crítico", "parado", "não consigo trabalhar"
+               - MEDIA: problema que afeta o trabalho mas possui alternativas/workarounds, lentidão significativa, funcionalidades parciais
+               - BAIXA: dúvidas, solicitações de informação, melhorias sugeridas, problemas menores que não impedem o trabalho
             
-            Regras para classificação de urgência:
-            - ALTA: sistema fora do ar, erro crítico, bloqueio total, palavras como "urgente", "crítico", "parado"
-            - MEDIA: problema que afeta o trabalho mas tem workaround, pedidos normais
-            - BAIXA: dúvidas, sugestões, melhorias, não é urgente
+            4. DESCRIÇÃO DO PROBLEMA:
+               - Seja detalhado e específico
+               - Inclua informações técnicas relevantes (mensagens de erro, códigos, URLs)
+               - Descreva o comportamento esperado vs comportamento atual
+               - Mencione tentativas de solução já realizadas (se houver no email)
+               - Use linguagem profissional e clara
+               - SEMPRE remova palavrões, xingamentos e linguagem ofensiva
             
-            Se não conseguir identificar alguma informação, use valores vazios ("") mas mantenha a estrutura JSON.
+            5. SUGESTÕES DE SOLUÇÕES:
+               - Gere 2 a 4 soluções práticas e viáveis baseadas no problema descrito
+               - Soluções devem ser específicas e acionáveis
+               - Ordene por probabilidade de sucesso (mais provável primeiro)
+               - Inclua soluções como: verificar configurações, reiniciar serviços, atualizar software, verificar logs, contatar suporte específico, etc.
+               - Se o problema não for claro, sugira investigações iniciais
+            
+            6. TRATAMENTO DO ASSUNTO:
+               - Use o ASSUNTO do email como base para o título
+               - Remova prefixos como RE:, FWD:, FW:, ENC:, [URGENTE], etc.
+               - Se o assunto estiver vazio ou muito genérico, use as primeiras palavras relevantes do corpo
+               - Título deve ser claro e descritivo do problema
+            
+            EXEMPLO DE LIMPEZA:
+            Antes: "Essa merda não funciona de jeito nenhum, já tentei de tudo!"
+            Depois: "O sistema apresenta falhas constantes após múltiplas tentativas de utilização."
+            
+            IMPORTANTE: Se não conseguir identificar alguma informação, use valores vazios ("") ou arrays vazios ([]) mas SEMPRE mantenha a estrutura JSON válida.
+            NUNCA inclua palavrões ou linguagem inadequada na resposta.
             """, from, subject, body);
     }
 
@@ -104,12 +139,25 @@ public class GeminiAiService {
         // Parse do JSON extraído
         JsonNode dataNode = objectMapper.readTree(contentText);
 
+        // Extrai as soluções sugeridas
+        List<String> suggestedSolutions = new ArrayList<>();
+        JsonNode solutionsNode = dataNode.path("suggestedSolutions");
+        if (solutionsNode.isArray()) {
+            for (JsonNode solutionNode : solutionsNode) {
+                String solution = solutionNode.asText();
+                if (solution != null && !solution.trim().isEmpty()) {
+                    suggestedSolutions.add(solution.trim());
+                }
+            }
+        }
+
         return EmailCallDataDto.builder()
                 .title(dataNode.path("title").asText())
                 .urgency(dataNode.path("urgency").asText())
                 .description(dataNode.path("description").asText())
                 .requisitanteEmail(dataNode.path("requisitanteEmail").asText())
                 .requisitanteName(dataNode.path("requisitanteName").asText())
+                .suggestedSolutions(suggestedSolutions.isEmpty() ? null : suggestedSolutions)
                 .build();
     }
 }
