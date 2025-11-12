@@ -105,4 +105,10 @@ public class CallController {
         var result = ResponseCallDto.fromCallEntity(this.callService.reOpenCall(id));
         return ResponseEntity.ok(result);
     }
+
+    @GetMapping("/count/{id}")
+    public ResponseEntity<Long> countCallsByEnterprise(@PathVariable Long id) {
+        Long count = this.callService.totalChamadosPorEmpresa(id);
+        return ResponseEntity.ok(count);
+    }
 }
