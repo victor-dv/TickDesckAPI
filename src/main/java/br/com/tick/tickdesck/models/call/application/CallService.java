@@ -239,6 +239,10 @@ public class CallService {
         return (long) calls.size();
     }
     //Total de chamados abertos da empresa
+    public Long totalChamadosAbertosPorEmpresa(Long idEmpresa) {
+        List<CallsEntity> calls = callRepository.findByTeam_Enterprise_Id(idEmpresa);
+        return calls.stream().filter(CallsEntity::isStatus).count();
+    }
     //Total de chamados fechados da empresa
     //total de chamados por equipe
     // Total de chamados por urgencia

@@ -4,7 +4,6 @@ import br.com.tick.tickdesck.models.call.application.CallService;
 import br.com.tick.tickdesck.models.call.application.dto.CreateCallDto;
 import br.com.tick.tickdesck.models.call.application.dto.ResponseCallDto;
 import br.com.tick.tickdesck.models.call.application.dto.UpdateCallDto;
-import br.com.tick.tickdesck.models.call.domain.CallsEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -107,8 +106,10 @@ public class CallController {
     }
 
     @GetMapping("/count/{id}")
-    public ResponseEntity<Long> countCallsByEnterprise(@PathVariable Long id) {
+    public ResponseEntity<?> countCallsByEnterprise(@PathVariable Long id) {
         Long count = this.callService.totalChamadosPorEmpresa(id);
-        return ResponseEntity.ok(count);
+        Long countOpen = this.callService.totalChamadosAbertosPorEmpresa(id);
+        return ResponseEntity.status(HttpStatus.OK).body("Total de chamados da epresa: " + count + " | Total de chamados abertos: " + countOpen +
+                "");
     }
 }
