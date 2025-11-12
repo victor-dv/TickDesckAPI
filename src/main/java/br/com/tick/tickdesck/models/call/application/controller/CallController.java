@@ -109,7 +109,8 @@ public class CallController {
     public ResponseEntity<?> countCallsByEnterprise(@PathVariable Long id) {
         Long count = this.callService.totalChamadosPorEmpresa(id);
         Long countOpen = this.callService.totalChamadosAbertosPorEmpresa(id);
+        Long countClosed = this.callService.totalChamadosFechadosPorEmpresa(id);
         return ResponseEntity.status(HttpStatus.OK).body("Total de chamados da epresa: " + count + " | Total de chamados abertos: " + countOpen +
-                "");
+                "| Total de chamados fechados: " + countClosed);
     }
 }
