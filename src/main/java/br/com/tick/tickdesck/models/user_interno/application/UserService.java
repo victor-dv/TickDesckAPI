@@ -82,7 +82,7 @@ public class UserService {
         // 🔹 Enviar e-mail com a senha
         emailService.send(
                 savedUser.getEmail(),
-                "Acesso ao Sistema de Chamados",
+                "Acesso ao TickDesck",
                 """
                 Olá, %s!
         
@@ -92,7 +92,7 @@ public class UserService {
                 Senha temporária: %s
         
                 Por favor, altere sua senha no primeiro acesso.
-                """.formatted(savedUser.getName(), savedUser.getUsername(), tempPassword)
+                """.formatted(savedUser.getName(), savedUser.getEmail(), tempPassword)
         );
 
         return savedUser;
