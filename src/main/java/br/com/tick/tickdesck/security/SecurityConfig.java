@@ -41,9 +41,9 @@ public class SecurityConfig {
                     auth.requestMatchers("api/user/**").permitAll()
                             .requestMatchers("api/user-externo/**").permitAll()
                             .requestMatchers("api/requisitante/**").permitAll()
-                            .requestMatchers("api/calls/**").permitAll()
+                            .requestMatchers("api/calls/**").authenticated()
                             .requestMatchers("api/actions/**").permitAll()
-                            .requestMatchers("api/reset-password/**").permitAll();
+                            .requestMatchers("api/reset-password/**").authenticated();
                     auth.anyRequest().authenticated();
                 })
                 //Adiciona o filtro de segurança personalizado antes do filtro de autenticação básica

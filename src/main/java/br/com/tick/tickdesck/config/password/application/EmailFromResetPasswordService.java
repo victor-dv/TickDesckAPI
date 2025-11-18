@@ -12,7 +12,7 @@ public class EmailFromResetPasswordService {
     private JavaMailSender mailSender;
 
     public void sendResetPasswordEmail(String to, String token) {
-        String resetUrl = "URL_PAGE_AQUI" + token;
+        String resetUrl = "https://tickdesk.vercel.app/AlteracaoSenha?TKRS=" + token;
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(to);
         message.setSubject("Redefinição de senha - TickDesck");
